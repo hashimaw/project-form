@@ -5,6 +5,8 @@ import axios from 'axios';
 import { DateInput } from '@mantine/dates';
 import { useState } from 'react';
 import { IconX } from '@tabler/icons-react';
+import { zodResolver } from 'mantine-form-zod-resolver';
+import { productschema } from '../schemas/productschema';
 
 type TProductForm = {
     opened: boolean,
@@ -19,25 +21,51 @@ export default function AddProductForm({opened, onClose}: TProductForm){
     const [tagInput, setTagInput] = useState<string>('');
     const [imageInputValue, setImageInputValue] = useState<string>(''); 
     const [imageUrls, setImageUrls] = useState<string[]>([]);
-  
-
 
     const queryClient = useQueryClient();
+
+    const handleSubmit = (values: Product) => { 
+        const validation = form.validate();
+
+        if (!validation.hasErrors) {
+            mutate({ ...values });
+            console.log("Validation successful");
+        } else {
+            console.log(validation.errors);  
+            form.setErrors(validation.errors);
+        }
+         };
+
     const createProduct = async (newPost: Product) => {
-        const { data } = await axios.post(`https://test-api.nova-techs.com/products`, newPost);
-        return data;
+        try {
+            const { data } = await axios.post(`https://test-api.nova-techs.com/products`, newPost);
+            return data; 
+        } catch (error: any) {
+          
+            throw error.response?.data || new Error('Failed to create product');
+        }
     };
 
     const {mutate, isPending, error } = useMutation({
         mutationFn: (newPost: Product) => createProduct(newPost),
-          onError:()=>{open()},
+          onError:()=>{},
           onSuccess:() => {
             queryClient.invalidateQueries({queryKey: ["products"]});
-            close();
+            form.reset();
+            setTags([]);
+            onClose();
           }
       })
 
-    const handleSubmit = (values: Product) => { mutate({ ...values }); };
+      const form = useForm<Product>({
+        mode: 'uncontrolled',
+        initialValues: { name: '', description: '', price: 0, category: '', tags: [], use: '', minimumQuantity: 1, sellingPrice: 0, addedBy: '', expiresAt: '', quantityOnHand: 0, reservedQuantity: 1, discount: 1, imageUrls: []},
+        validate: zodResolver(productschema),
+      });
+      
+
+
+
 
     const addImageUrl = () => { 
         if (imageInputValue.trim() && !imageUrls.includes(imageInputValue.trim())) { 
@@ -46,7 +74,7 @@ export default function AddProductForm({opened, onClose}: TProductForm){
             form.setFieldValue('imageUrls', newImageUrls); 
             setImageInputValue(''); 
         } }; 
-        const removeImageUrl = (url: string) => { 
+    const removeImageUrl = (url: string) => { 
             const newImageUrls = imageUrls.filter((imgUrl) => imgUrl !== url); 
             setImageUrls(newImageUrls); 
             form.setFieldValue('imageUrls', newImageUrls);
@@ -58,39 +86,22 @@ export default function AddProductForm({opened, onClose}: TProductForm){
               form.setFieldValue('tags', newTags);
               setTagInput('');
             }
-          };
-          
-          const removeTag = (tag: string) => {
+        };  
+        const removeTag = (tag: string) => {
             const newTags = tags.filter((t) => t !== tag);
             setTags(newTags);
             form.setFieldValue('tags', newTags);
           };
     
-    
-    const form = useForm<Product>({
-        mode: 'uncontrolled',
-        initialValues: { name: '', description: '', price: 0, category: '', tags: [], use: '', minimumQuantity: 1, sellingPrice: 0, addedBy: '', expiresAt: '', quantityOnHand: 0, reservedQuantity: 1, discount: 1, imageUrls: []},
-        validate: {
-          name: (value) => (value.length == 0 ? 'Please write the product name' : null),
-          price: (value) => (value <= 0 ? "please enter the price" : null),
-          category: (value) => (value.length == 0 ? 'Please write the category' : null),
-          tags: (value) => (value.length > 0 ? null : 'at least one tag is needed'),
-          use: (value) => (value.length == 0 ? 'Please write the use' : null),
-          addedBy: (value) => (value.length == 0 ? 'Please write the product owner name' : null),
-          quantityOnHand: (value) => (value <= 0 ? "please enter the available quantity" : null),
-          imageUrls: (value) => { const urlPattern = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(#[-a-z\d_]*)?$/i; for (let url of value) { if (!urlPattern.test(url)) { return 'Invalid URL'; } } return null; },
-        },
-      });
-
     return(
         <>
         <Modal opened={opened} onClose={onClose}size="auto" title="Add Product Form" centered>
         
-        <form >
-            <div className='flex gap-5 mb-3'>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
                 <LoadingOverlay visible={isPending}>
                 </LoadingOverlay>
-
+                {error&&<div className='text-center mb-5 text-red-400'>{error.message}</div>}
+            <div className='flex gap-5 mb-3'>
                 <TextInput mb={7}
                     label="Product Name"
                     placeholder="nike shoes"
@@ -113,27 +124,30 @@ export default function AddProductForm({opened, onClose}: TProductForm){
                     key={form.key('price')}
                     {...form.getInputProps('price')}
                 />
-                <TextInput
-                    label="Tags"
-                    placeholder="Enter tags"
-                    value={tagInput}
-                    onChange={(e) => setTagInput(e.currentTarget.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === 'Tab') {
-                        e.preventDefault();
-                        addTag();
-                        }
-                    }}
-                    error={form.errors.tags}
-                    />
-                    <div> 
-                    {tags.map((tag) => ( 
-                        <Pill key={tag} onRemove={() => removeTag(tag)}> {tag} 
-                        <ActionIcon size="xs" ml={2} onClick={() => removeTag(tag)}> 
-                            <IconX size={10} /> 
-                        </ActionIcon> 
-                        </Pill> ))} 
+                <div>
+                    <TextInput
+                        label="Tags"
+                        placeholder="Enter tags"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.currentTarget.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === 'Tab') {
+                            e.preventDefault();
+                            addTag();
+                            }
+                        }}
+                        error={form.errors.tags} 
+                        />
+                        <div className='max-w-44'> 
+                        {tags.map((tag) => ( 
+                            <Pill key={tag} onRemove={() => removeTag(tag)}> {tag} 
+                            <ActionIcon size="xs" ml={2} onClick={() => removeTag(tag)}> 
+                                <IconX size={10} /> 
+                            </ActionIcon> 
+                            </Pill> ))} 
+                        </div>
                 </div>
+                
             </div>
           
             <div className='flex gap-5 mb-3'>
@@ -190,22 +204,32 @@ export default function AddProductForm({opened, onClose}: TProductForm){
                     key={form.key('minimumQuantity')}
                     {...form.getInputProps('minimumQuantity')}
                 />
-                <TextInput 
-        label="Image URLs" 
-        placeholder="Enter image URL" 
-        value={imageInputValue} 
-        onChange={(e) => setImageInputValue(e.currentTarget.value)} 
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === 'Tab') 
-            { e.preventDefault(); addImageUrl(); } }} 
-            error={form.errors.imageUrls}
-        /> 
-        <div> {imageUrls.map((url) => ( 
-            <Pill key={url}> {url} 
-            <ActionIcon size="xs" onClick={() => removeImageUrl(url)}> 
-                <IconX size={10} /> 
-            </ActionIcon> 
-            </Pill> ))} 
-        </div>
+
+                <div>
+              
+                    <TextInput
+                        label="Image URLs"
+                        placeholder="Enter image URL"
+                        value={imageInputValue}
+                        onChange={(e) => setImageInputValue(e.currentTarget.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === 'Tab') {
+                            e.preventDefault();
+                            addImageUrl();
+                            }
+                        }}
+                        error={form.errors.imageUrls}  // Display error under input
+                        /> 
+                        <div className='max-w-44' > {imageUrls.map((url) => ( 
+                            <Pill w={200} key={url}>
+                                <ActionIcon size="xs" onClick={() => removeImageUrl(url)}> 
+                                    <IconX size={10} /> 
+                                </ActionIcon>  
+                                {url} 
+                            </Pill> ))} 
+                        </div>
+                </div>
+                
             </div>
        
      

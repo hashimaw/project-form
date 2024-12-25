@@ -1,14 +1,15 @@
-import { Button } from "@mantine/core"
-import AddProductForm from "../Components/AddProductForm"
+import { Button, Center } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
+import SellProductsForm from "../Components/SellproductForm";
+
 export default function Sales(){
       const [opened, { open, close }] = useDisclosure(false);
     return(
         <>
        <Button onClick={open} variant='outline'  >
-            Add Product
+            sell Product
         </Button>
-        <AddProductForm opened={opened} onClose={close}/>
+        <SellProductsForm opened={opened} onClose={close}/>
         </>
     )
 }
