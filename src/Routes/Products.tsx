@@ -63,14 +63,14 @@ export default function Products(){
           verticalSpacing={{ base: 'md', sm: 'xl' }}
         >
           {data.data.map((product: Product) => (
-          
+            <Link className='no-underline' to={`/details/${product.id}` } >
                 <div id={product.id} className='hover:cursor-pointer hover:bg-slate-200 w-fit p-4 rounded-2xl mt-4'>
                 <img className='w-80 h-52 object-cover rounded-xl transition-all duration-700 ease-in-out hover:scale-105' src={product.imageUrls[0]} alt="" />
                 <h2 className='m-0 text-gray-800'>{product.name}</h2>
                 <p className='m-0 text-gray-800'>{product.category}</p>
                 <div className='m-0 flex gap-3'><h4 className='line-through text-red-500 m-0 '>{product.price}</h4><h4 className='m-0 text-green-500'>{product.sellingPrice}</h4></div>
                 </div>
-     
+            </Link>
           ))}
           
         </SimpleGrid>

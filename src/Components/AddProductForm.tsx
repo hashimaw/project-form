@@ -24,17 +24,16 @@ export default function AddProductForm({opened, onClose}: TProductForm){
 
     const queryClient = useQueryClient();
 
-    const handleSubmit = (values: Product) => { 
+    const handleSubmit = (values: Product) => {
+
         const validation = form.validate();
 
         if (!validation.hasErrors) {
             mutate({ ...values });
-            console.log("Validation successful");
         } else {
-            console.log(validation.errors);  
             form.setErrors(validation.errors);
         }
-         };
+    };
 
     const createProduct = async (newPost: Product) => {
         try {
@@ -45,6 +44,8 @@ export default function AddProductForm({opened, onClose}: TProductForm){
             throw error.response?.data || new Error('Failed to create product');
         }
     };
+
+
 
     const {mutate, isPending, error } = useMutation({
         mutationFn: (newPost: Product) => createProduct(newPost),
