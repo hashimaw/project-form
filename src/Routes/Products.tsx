@@ -64,7 +64,6 @@ export default function Products(){
         >
           {data.data.map((product: Product) => (
             <Link className='no-underline' to={`/details/${product.id}` } >
-            
                 <div id={product.id} className='hover:cursor-pointer hover:bg-slate-200 w-fit p-4 rounded-2xl mt-4'>
                 <img className='w-80 h-52 object-cover rounded-xl transition-all duration-700 ease-in-out hover:scale-105' src={product.imageUrls[0]} alt="" />
                 <h2 className='m-0 text-gray-800'>{product.name}</h2>
