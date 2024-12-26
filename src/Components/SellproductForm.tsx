@@ -1,10 +1,8 @@
-import { Modal, Select, Button, Center, Stepper, NumberInput, LoadingOverlay } from "@mantine/core"
+import { Modal, Select, Button, Center, Stepper, NumberInput } from "@mantine/core"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useState, useEffect } from "react"
 import { useForm } from "@mantine/form";
-import { zodResolver } from 'mantine-form-zod-resolver';
-import { z } from "zod";
 
 interface IDatabse {
     orderdItems: {
@@ -42,7 +40,7 @@ const fetchProducts = async (page: number) => {
 }
 
 export default function SellProductsForm({opened, onClose, setDatabase }:TsellProductsform, ){
-    const [page, setPage] = useState(1);
+    const [page] = useState(1);
     const [items, setItems]= useState<any>([]);
     const [active, setAcitve] = useState(0)
 
@@ -51,7 +49,7 @@ export default function SellProductsForm({opened, onClose, setDatabase }:TsellPr
     }
     
 
-    const { isPending, isFetched, error, data } = useQuery({
+    const { isFetched, data } = useQuery({
         queryKey: ['products', page],
         queryFn: () => fetchProducts(page),
             enabled: true,
@@ -67,12 +65,12 @@ export default function SellProductsForm({opened, onClose, setDatabase }:TsellPr
         }, [isFetched]);
 
 
-        const fields = z.object({
-            id: z.string().min(2, {message:"Please select the item"}),
-            quantity: z.number().min(1, {message:'Quantity can not be less than 1'}),
-            sellingPrice: z.number().min(1, {message:'selling price can not be less than 1'}),
-            merchant: z.string().min(2, {message: 'please select marchant'})
-        })
+        // const fields = z.object({
+        //     id: z.string().min(2, {message:"Please select the item"}),
+        //     quantity: z.number().min(1, {message:'Quantity can not be less than 1'}),
+        //     sellingPrice: z.number().min(1, {message:'selling price can not be less than 1'}),
+        //     merchant: z.string().min(2, {message: 'please select marchant'})
+        // })
 
         const form = useForm<{ orderdItems: Item[];
         }>({
