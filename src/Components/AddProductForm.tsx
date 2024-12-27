@@ -6,7 +6,7 @@ import { DateInput } from '@mantine/dates';
 import { useState } from 'react';
 import { IconX } from '@tabler/icons-react';
 import { zodResolver } from 'mantine-form-zod-resolver';
-import { productschema } from '../schemas/productschema';
+import { productschema } from '../schemas/validationSchema';
 
 type TProductForm = {
     opened: boolean,
@@ -234,7 +234,7 @@ export default function AddProductForm({opened, onClose}: TProductForm){
             </div>
        
      
-          <Center mt={20}> <Button type='submit' variant="filled">Add Product</Button></Center>
+          <Center mt={20}> <Button  type='submit' variant="filled">Add Product</Button></Center>
              
         </form>
       </Modal>

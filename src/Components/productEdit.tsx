@@ -6,7 +6,7 @@ import { IconEdit, IconX } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { DateInput } from '@mantine/dates';
 import dayjs from 'dayjs';
-import { productschema } from '../schemas/productschema';
+import { productschema } from '../schemas/validationSchema';
 import { zodResolver } from '@mantine/form';
 import axios from 'axios';
 

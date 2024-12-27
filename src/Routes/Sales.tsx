@@ -2,31 +2,12 @@ import { Button, Center } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import SellProductsForm from "../Components/SellproductForm";
 import { useState } from "react";
-
-interface IDatabse {
-    orderdItems: {
-        id: string,
-        quantity: number,
-        sellingPrice: number,
-    }[];
-    merchant: string
-}
+import { ISales } from "../interfaces/sales";
 
 
 export default function Sales(){
       const [opened, { open, close }] = useDisclosure(false);
-    const [database, setDatabase] = useState<IDatabse[]>([
-        {
-            orderdItems:[
-                    {
-                        id: 'firstitem',
-                        quantity: 5,
-                        sellingPrice: 100,
-                    }
-                ],
-            
-            merchant: 'merchant1'
-        }]);
+    const [database, setDatabase] = useState<ISales[]>([]);
 
     return(
         <>
@@ -36,7 +17,7 @@ export default function Sales(){
             </Button> 
         </Center>
         
-        <SellProductsForm setDatabase={setDatabase} opened={opened} onClose={close}/>
+        <SellProductsForm  opened={opened} onClose={close}/>
 
         <Center mt={20}>
 
@@ -52,7 +33,7 @@ export default function Sales(){
                 </thead>
 
                 <tbody className="text-stone-900 text-base font-medium">
-                {database.map((data: IDatabse , index) => (
+                {database.map((data: ISales , index) => (
                     <tr key={index} className="overflow-hidden border items-start">
                         <td className="content-start pl-2">{data.merchant}</td>
                         <td>
