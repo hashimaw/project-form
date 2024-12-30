@@ -154,7 +154,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                     break;
 
                 case 1:
-                    orederdItemsForm.values.orderdItems.map((item, index) => (
+                    orederdItemsForm.values.orderdItems.map(( index) => (
                         orederdItemsForm.validateField(`orderdItems.${index}.id`),
                         orederdItemsForm.validateField(`orderdItems.${index}.sellingPrice`),
                         orederdItemsForm.validateField(`orderdItems.${index}.quantity`)
@@ -169,7 +169,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                     break;
 
                 case 2:
-                    paymentForm.values.selectedPayments.map((item, index) => (
+                    paymentForm.values.selectedPayments.map((index) => (
                         paymentForm.validateField(`selectedPayments.${index}.bank`),
                         paymentForm.validateField(`selectedPayments.${index}.accountNumber`),
                         paymentForm.validateField(`selectedPayments.${index}.amount`),
@@ -240,7 +240,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                     
                     <Stepper.Step label='select Item'>
                         <form onSubmit={orederdItemsForm.onSubmit((values) => {console.log(values); })}>
-                        {orederdItemsForm.values.orderdItems.map((item, index) => (
+                        {orederdItemsForm.values.orderdItems.map((_, index) => (
                             <div className="flex items-center my-5 gap-5" key={index}>
                                 <Select
                                     mb={10}
@@ -282,7 +282,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                         <center>
                         {`Total Price: ${payable} -- You've paid: ${paid} -- Remaining: ${payable-paid}`}
                         </center>
-                        {paymentForm.values.selectedPayments.map((item, index) => (
+                        {paymentForm.values.selectedPayments.map((_, index) => (
                             <div className="flex items-center my-5 gap-5" key={index}>
                                 <Select
                                     mb={10}

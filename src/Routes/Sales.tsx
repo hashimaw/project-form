@@ -28,8 +28,9 @@ export default function Sales(){
                         <th className="w-80 py-3 text-start">Orderd Item ID</th>
                         <th className="w-40 py-3 text-start">Quantity</th>
                         <th className="w-40 py-3 text-start">Selling Price</th>
-                        <th className=""></th>
+                        <th className="w-52 text-start">Payment Options</th>
                     </tr>
+                    <tr></tr>
                 </thead>
 
                 <tbody className="text-stone-900 text-base font-medium">
@@ -51,13 +52,18 @@ export default function Sales(){
                                 <td className="py-2 flex flex-col">{data.sellingPrice}</td>
                             ))}
                         </td>
-                        <td className="pr-3 my-4"></td>
+                        <td>
+                            {data.payments.map((data:any)=>(
+                                <td className="py-2 flex flex-col">{data.bank}-{data.amount}</td>
+                            ))}
+                        </td>
                     </tr>
                   ))}
                  </tbody>
             </table>
 
-        </Center>        
+        </Center>      
+  
         </>
     )
 }
