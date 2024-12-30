@@ -35,10 +35,12 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
     const [active, setAcitve] = useState(0)
     const [payable, setPayable] = useState(0);
     const [paid, setPaid] = useState(0);
+    const [orderedItems, setOrderedItems] = useState<IOrderedItem[]>([]);
+    const [paymentOptions, setPaymentOptions] = useState<IPayment[]>([]);
+    const [merchant, setMerchant] = useState('');
 
 
     const handlefileupload = (merchant:any,orderdItems:any,payments:any) => {
-       // setDatabase(prev => [...prev, Database]);
         const newSale: ISales = {
             merchant,
             orderdItems,
@@ -72,57 +74,78 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
           });
           
         const marchantForm = useForm({
-          
+            mode: "uncontrolled",
             initialValues:{ merchant:''},
-            validate: zodResolver(merchantSchema)
+            validate: zodResolver(merchantSchema),
+            onValuesChange: (values) => {
+               setMerchant(values.merchant);
+            }
         })
 
         const orederdItemsForm = useForm<{ orderdItems: IOrderedItem[];
-        }>({
+        }>({mode:"uncontrolled",
             initialValues: { orderdItems: [{ id:'', quantity:0, sellingPrice:0 }]},
-            validate: zodResolver(orderedItemSchema)
+            validate: zodResolver(orderedItemSchema),
+            onValuesChange: (values) => {
+                let total=0
+                setOrderedItems(values.orderdItems)
+                for (let i = 0; i < values.orderdItems.length; i++) {
+                          const item = values.orderdItems[i];
+                          total += item.sellingPrice * item.quantity;
+                        }
+                setPayable(total)
+            }
         })
 
-        useEffect(()=>{
-                const total = calculateTotal();
-                setPayable(total);
-        }, [orederdItemsForm.values.orderdItems])
+        // useEffect(()=>{
+        //         const total = calculateTotal();
+        //         setPayable(total);
+        // }, [orederdItemsForm.values.orderdItems])
 
 
      
 
         const paymentForm = useForm<{ selectedPayments: IPayment[];
-        }>({
+        }>({ mode: 'uncontrolled',
             initialValues: { selectedPayments: [{ accountNumber:'', bank:'', amount:0, date: new Date() }]},
-            validate: zodResolver(paymentSchema)
+            validate: zodResolver(paymentSchema),
+            onValuesChange: (values) => {
+                setPaymentOptions(values.selectedPayments);
+                let total=0
+                for (let i = 0; i < values.selectedPayments.length; i++) {
+                          const item = values.selectedPayments[i];
+                          total += item.amount;
+                        }
+                setPaid(total);
+            }
         })
 
 
-        const calculateTotal = () => {
-            let total = 0;
-            for (let i = 0; i < orederdItemsForm.values.orderdItems.length; i++) {
-              const item = orederdItemsForm.values.orderdItems[i];
-              total += item.sellingPrice * item.quantity;
-            }
-            console.log(total);
-            return total;
-          };
+        // const calculateTotal = () => {
+        //     let total = 0;
+        //     for (let i = 0; i < orederdItemsForm.values.orderdItems.length; i++) {
+        //       const item = orederdItemsForm.values.orderdItems[i];
+        //       total += item.sellingPrice * item.quantity;
+        //     }
+        //     console.log(total);
+        //     return total;
+        //   };
           
-          const deductfromtotal = () => {
-            let total = 0;
-            for (let i = 0; i < paymentForm.values.selectedPayments.length; i++) {
-              const item = paymentForm.values.selectedPayments[i];
-              total += item.amount;
-            }
-            console.log(total);
-           setPaid(total);
-            return total;
-          };
+        //   const deductfromtotal = () => {
+        //     let total = 0;
+        //     for (let i = 0; i < paymentForm.values.selectedPayments.length; i++) {
+        //       const item = paymentForm.values.selectedPayments[i];
+        //       total += item.amount;
+        //     }
+        //     console.log(total);
+        //    setPaid(total);
+        //     return total;
+        //   };
 
-        useEffect(()=>{
-            const total = deductfromtotal();
-            setPaid(total);
-        }, [paymentForm.values.selectedPayments])
+        // useEffect(()=>{
+        //     const total = deductfromtotal();
+        //     setPaid(total);
+        // }, [paymentForm.values.selectedPayments])
           
 
 
@@ -326,7 +349,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
 
                     <Stepper.Completed>
                         <div>
-                           Selling the following Products for {marchantForm.values.merchant}
+                           Selling the following Products for {merchant}
                            <table className="border-collapse mt-1 mb-10 border-spacing-y-2">
                               <thead>
                                   <tr className="text-teal-900 border text-lg font-semibold">
@@ -336,7 +359,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                                   </tr>
                               </thead>
                               <tbody className="text-stone-900 text-base font-medium">
-                              {orederdItemsForm.values.orderdItems.map((item)=>(
+                              {orderedItems.map((item)=>(
                                 <tr className="overflow-hidden border items-start">
                                     <td className="pl-2">{item.id}</td>
                                     <td>{item.quantity}</td>
@@ -359,7 +382,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                                   </tr>
                               </thead>
                               <tbody className="text-stone-900 text-base font-medium">
-                              {paymentForm.values.selectedPayments.map((payment)=>(
+                              {paymentOptions.map((payment)=>(
                                 <tr className="overflow-hidden border items-start">
                                     <td className="pl-2">{payment.bank}</td>
                                     <td>{payment.accountNumber}</td>
@@ -384,7 +407,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                         disabled={active==2? payable-paid==0? false:true:false}
                         onClick={()=>{
                             stepNext(); 
-                            active==3&& handlefileupload(marchantForm.values.merchant, orederdItemsForm.values.orderdItems, paymentForm.values.selectedPayments)
+                            active==3&& handlefileupload(merchant, orderedItems, paymentOptions)
                         }} 
                             type={active == 3 ? 'submit':'button' 
                             }>Next</Button>
