@@ -16,7 +16,7 @@ import { z } from 'zod';
       z.object({
         bank: z.string().min(1, "Bank name is required"),
         accountNumber: z.string().min(5, "Account number must be at least 5 digits"),
-        amount: z.number().min(10, "Amount must be greater thatn 10"),
+        amount: z.number().min(1, "Amount must be greater thatn 1"),
         date: z.coerce.date({ invalid_type_error: "Invalid date format" })
       })
     ).nonempty("At least one payment item is required")

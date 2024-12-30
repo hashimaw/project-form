@@ -6,20 +6,20 @@ import { useState, useEffect } from "react"
 import { useForm } from "@mantine/form";
 import { ISales, IOrderedItem, IPayment } from "../interfaces/sales";
 import { zodResolver } from "@mantine/form";
-import { salesSchema, productschema, orderedItemSchema, paymentSchema } from "../schemas/validationSchema";
+import { orderedItemSchema, paymentSchema } from "../schemas/validationSchema";
 import { z } from "zod";
 
 type TsellProductsform = {
     opened: boolean
     onClose: () => void
-
+    setDatabase: React.Dispatch<React.SetStateAction<ISales[]>>;
 }
 
 interface ISelectorItem  {
     name: string;
     id: string;
 }
-
+  
 
 
 const fetchProducts = async (page: number) => {
@@ -29,15 +29,23 @@ const fetchProducts = async (page: number) => {
     return data
 }
 
-export default function SellProductsForm({opened, onClose,  }:TsellProductsform, ){
+export default function SellProductsForm({opened, onClose, setDatabase  }:TsellProductsform, ){
     const [page] = useState(1);
     const [items, setItems]= useState<any>([]);
     const [active, setAcitve] = useState(0)
-    const [database, setDatabase] = useState<ISales[]>([]);
+    const [payable, setPayable] = useState(0);
+    const [paid, setPaid] = useState(0);
 
-    // const handlefileupload = (Database: any) => {
-    //     setDatabase(prev => [...prev, Database]);
-    // }
+
+    const handlefileupload = (merchant:any,orderdItems:any,payments:any) => {
+       // setDatabase(prev => [...prev, Database]);
+        const newSale: ISales = {
+            merchant,
+            orderdItems,
+            payments,
+          };
+          setDatabase((prev) => [...prev, newSale]);
+        }
 
     
     
@@ -57,31 +65,66 @@ export default function SellProductsForm({opened, onClose,  }:TsellProductsform,
             }
         }, [isFetched]);
 
+      
+
         const merchantSchema = z.object({
             merchant: z.string().min(1, "Please Select Merchant")
           });
           
         const marchantForm = useForm({
-            mode:'uncontrolled',
+          
             initialValues:{ merchant:''},
             validate: zodResolver(merchantSchema)
         })
 
         const orederdItemsForm = useForm<{ orderdItems: IOrderedItem[];
         }>({
-            mode:'uncontrolled',
             initialValues: { orderdItems: [{ id:'', quantity:0, sellingPrice:0 }]},
             validate: zodResolver(orderedItemSchema)
         })
 
+        useEffect(()=>{
+                const total = calculateTotal();
+                setPayable(total);
+        }, [orederdItemsForm.values.orderdItems])
+
+
+     
+
         const paymentForm = useForm<{ selectedPayments: IPayment[];
         }>({
-            mode:'uncontrolled',
             initialValues: { selectedPayments: [{ accountNumber:'', bank:'', amount:0, date: new Date() }]},
             validate: zodResolver(paymentSchema)
         })
 
-    
+
+        const calculateTotal = () => {
+            let total = 0;
+            for (let i = 0; i < orederdItemsForm.values.orderdItems.length; i++) {
+              const item = orederdItemsForm.values.orderdItems[i];
+              total += item.sellingPrice * item.quantity;
+            }
+            console.log(total);
+            return total;
+          };
+          
+          const deductfromtotal = () => {
+            let total = 0;
+            for (let i = 0; i < paymentForm.values.selectedPayments.length; i++) {
+              const item = paymentForm.values.selectedPayments[i];
+              total += item.amount;
+            }
+            console.log(total);
+           setPaid(total);
+            return total;
+          };
+
+        useEffect(()=>{
+            const total = deductfromtotal();
+            setPaid(total);
+        }, [paymentForm.values.selectedPayments])
+          
+
 
         const addItem = () => {
             orederdItemsForm.insertListItem('orderdItems', { id: '', quantity:0, sellingPrice: 0 });
@@ -91,7 +134,7 @@ export default function SellProductsForm({opened, onClose,  }:TsellProductsform,
             orederdItemsForm.removeListItem('orderdItems', index);
         };
         const addPaymentOption = ( ) => {
-            paymentForm.insertListItem('selectedPayments', { id: '', quantity:0, sellingPrice: 0 });
+            paymentForm.insertListItem('selectedPayments', { accountNumber:'', bank:'', amount:0, date: new Date() });
         };
 
         const removePaymentOption = ( index: number) => {
@@ -161,7 +204,13 @@ export default function SellProductsForm({opened, onClose,  }:TsellProductsform,
                 setAcitve(0)
             }} title='Sell Product' >
            
-            <Modal opened={active==4} onClose={() => {onClose(); orederdItemsForm.reset(); setAcitve(0)}} title='Form recorderd successfully'>
+            <Modal opened={active==4} 
+                onClose={() => {
+                    onClose(); 
+                    orederdItemsForm.reset(); 
+                    setAcitve(0)
+                    }} 
+                title='Form recorderd successfully'>
                 <Button 
                 onClick={()=>{
                     onClose(); 
@@ -177,107 +226,153 @@ export default function SellProductsForm({opened, onClose,  }:TsellProductsform,
                     
                     <Stepper.Step label='Select marchant' >
                         <form onSubmit={marchantForm.onSubmit((values) => {console.log(values); })}>
-                        <Select
-                            mb={10}
-                            label="Select a marchant"
-                            placeholder="merchant2"
-                            data={['marhcant1', 'marchant2', 'marhchant3']}
-                            key={marchantForm.key('merchant')}
-                            {...marchantForm.getInputProps('merchant')}
-                            error={marchantForm.errors.merchant}
-                            />
+                            <Select
+                                mb={10}
+                                label="Select a marchant"
+                                placeholder="merchant2"
+                                data={['marhcant1', 'marchant2', 'marhchant3']}
+                                key={marchantForm.key('merchant')}
+                                {...marchantForm.getInputProps('merchant')}
+                                error={marchantForm.errors.merchant}
+                                />
                         </form>
                     </Stepper.Step>
                     
                     <Stepper.Step label='select Item'>
                         <form onSubmit={orederdItemsForm.onSubmit((values) => {console.log(values); })}>
                         {orederdItemsForm.values.orderdItems.map((item, index) => (
-                         
                             <div className="flex items-center my-5 gap-5" key={index}>
-                            <Select
-                                mb={10}
-                                w={200}
-                                label="Select an item"
-                                data={items}
-                                key={orederdItemsForm.key(`orderdItems.${index}.id`)}
-                                {...orederdItemsForm.getInputProps(`orderdItems.${index}.id`)}
-                             
-                            />
-                            <NumberInput mb={7}
-                                label="Quantity"
-                                placeholder="100"
-                                trimLeadingZeroesOnBlur
-                                key={orederdItemsForm.key(`orderdItems.${index}.quantity`)}
-                                {...orederdItemsForm.getInputProps(`orderdItems.${index}.quantity`)}
-                            />
-                            <NumberInput mb={7}
-                                label="Selling Price"
-                                placeholder="Selling price"
-                                trimLeadingZeroesOnBlur
-                                prefix="$"
-                                key={orederdItemsForm.key(`orderdItems.${index}.sellingPrice`)}
-                                {...orederdItemsForm.getInputProps(`orderdItems.${index}.sellingPrice`)}
-                            />
-                            <Button onClick={()=>removeItem(index)}>Remove</Button>
+                                <Select
+                                    mb={10}
+                                    w={200}
+                                    label="Select an item"
+                                    data={items}
+                                    key={orederdItemsForm.key(`orderdItems.${index}.id`)}
+                                    {...orederdItemsForm.getInputProps(`orderdItems.${index}.id`)}
+                                />
+                                <NumberInput mb={7}
+                                    label="Quantity"
+                                    placeholder="100"
+                                    trimLeadingZeroesOnBlur
+                                    key={orederdItemsForm.key(`orderdItems.${index}.quantity`)}
+                                    {...orederdItemsForm.getInputProps(`orderdItems.${index}.quantity`)}
+                                    
+                                />
+                                <NumberInput mb={7}
+                                    label="Selling Price"
+                                    placeholder="Selling price"
+                                    trimLeadingZeroesOnBlur
+                                    prefix="$"
+                                    key={orederdItemsForm.key(`orderdItems.${index}.sellingPrice`)}
+                                    {...orederdItemsForm.getInputProps(`orderdItems.${index}.sellingPrice`)}
+                                />
+                                <Button onClick={()=>removeItem(index)}>Remove</Button>
                             </div>
-                            
-                    ))}
+                        ))}
                         </form>
-                   
-                   
-                        <Button onClick={()=>addItem()}>addItem</Button>
+                        <center>
+                        Total Price: {payable}
+                        </center>
+                        
+                        <Button onClick={()=>addItem()}>Add Item</Button>
                     </Stepper.Step>
 
                     <Stepper.Step label='add your payment options'>
                         <form onSubmit={paymentForm.onSubmit((values) => {console.log(values); })}>
+                        <center>
+                        {`Total Price: ${payable} -- You've paid: ${paid} -- Remaining: ${payable-paid}`}
+                        </center>
                         {paymentForm.values.selectedPayments.map((item, index) => (
-                         
                             <div className="flex items-center my-5 gap-5" key={index}>
-                            <Select
-                                mb={10}
-                                w={200}
-                                label="Select Your Bank"
-                                data={["CBE", "Dashen Bank", "Anbessa Bank", "Awash Bank", "Abyssinia Bank"]}
-                                key={paymentForm.key(`selectedPayments.${index}.bank`)}
-                                {...paymentForm.getInputProps(`selectedPayments.${index}.bank`)}
-                             
-                            />
-                            <TextInput mb={7}
-                                label="Account Number"
-                                placeholder="100"
-                                key={paymentForm.key(`selectedPayments.${index}.accountNumber`)}
-                                {...paymentForm.getInputProps(`selectedPayments.${index}.accountNumber`)}
-                            />
-                            <NumberInput mb={7}
-                                label="Ammount"
-                                placeholder="0"
-                                trimLeadingZeroesOnBlur
-                                prefix="$"
-                                key={paymentForm.key(`selectedPayments.${index}.amount`)}
-                                {...paymentForm.getInputProps(`selectedPayments.${index}.amount`)}
-                            />
-                            <DateInput
-                                w={200}
-                                label="Payment Date"
-                                placeholder="Payment Date"
-                                key={paymentForm.key(`selectedPayments.${index}.date`)}
-                                {...paymentForm.getInputProps(`selectedPayments.${index}.date`)}
-                            />
-                            <Button onClick={()=>removePaymentOption(index)}>Remove</Button>
+                                <Select
+                                    mb={10}
+                                    w={200}
+                                    label="Select Your Bank"
+                                    data={["CBE", "Dashen Bank", "Anbessa Bank", "Awash Bank", "Abyssinia Bank"]}
+                                    key={paymentForm.key(`selectedPayments.${index}.bank`)}
+                                    {...paymentForm.getInputProps(`selectedPayments.${index}.bank`)}
+                                    />
+                                <TextInput mb={7}
+                                    label="Account Number"
+                                    placeholder="100"
+                                    key={paymentForm.key(`selectedPayments.${index}.accountNumber`)}
+                                    {...paymentForm.getInputProps(`selectedPayments.${index}.accountNumber`)}
+                                    />
+                                <NumberInput mb={7}
+                                    label="Ammount"
+                                    placeholder="0"
+                                    trimLeadingZeroesOnBlur
+                                    prefix="$"
+                                    
+                                    key={paymentForm.key(`selectedPayments.${index}.amount`)}
+                                    {...paymentForm.getInputProps(`selectedPayments.${index}.amount`)}
+                                    />
+                                <DateInput
+                                    w={200}
+                                    label="Payment Date"
+                                    placeholder="Payment Date"
+                                    key={paymentForm.key(`selectedPayments.${index}.date`)}
+                                    {...paymentForm.getInputProps(`selectedPayments.${index}.date`)}
+                                    />
+                                <Button onClick={()=>removePaymentOption(index)}>Remove</Button>
                             </div>
-                            
-                    ))}
+                        ))}
                         </form>
                    
                    
-                        <Button onClick={()=>addPaymentOption()}>addItem</Button>
+                        <Button onClick={()=>addPaymentOption()}>Add Item</Button>
                     </Stepper.Step>
                     
 
                     <Stepper.Completed>
                         <div>
-                            your order is fully recorderd
-                            do you want to submit?
+                           Selling the following Products for {marchantForm.values.merchant}
+                           <table className="border-collapse mt-1 mb-10 border-spacing-y-2">
+                              <thead>
+                                  <tr className="text-teal-900 border text-lg font-semibold">
+                                      <th className="w-80 py-3 pl-2 text-start">Item Id</th>
+                                      <th className="w-40 py-3 text-start">Quantity</th>
+                                      <th className="w-40 py-3 text-start">Selling Price</th>
+                                  </tr>
+                              </thead>
+                              <tbody className="text-stone-900 text-base font-medium">
+                              {orederdItemsForm.values.orderdItems.map((item)=>(
+                                <tr className="overflow-hidden border items-start">
+                                    <td className="pl-2">{item.id}</td>
+                                    <td>{item.quantity}</td>
+                                    <td>{item.sellingPrice}</td>
+                                </tr>
+                                ))}
+                                    
+                               </tbody>
+                          </table>
+                           
+
+                          You have paid with the following payment options:
+                           <table className="border-collapse mt-1 border-spacing-y-2">
+                              <thead>
+                                  <tr className="text-teal-900 border text-lg font-semibold">
+                                      <th className="w-40 py-3 pl-2 text-start">bank</th>
+                                      <th className="w-80 py-3 text-start">Account Number</th>
+                                      <th className="w-40 py-3 text-start">Ammount</th>
+                                      <th className="w-40 py-3 text-start">date</th>
+                                  </tr>
+                              </thead>
+                              <tbody className="text-stone-900 text-base font-medium">
+                              {paymentForm.values.selectedPayments.map((payment)=>(
+                                <tr className="overflow-hidden border items-start">
+                                    <td className="pl-2">{payment.bank}</td>
+                                    <td>{payment.accountNumber}</td>
+                                    <td>{payment.amount}</td>
+                                    <td className="pr-3 my-4">{new Date (payment.date).toLocaleDateString("en-US", {year:'numeric', month:'short',day:'numeric'})}</td>
+                                </tr>
+                                ))}
+                                    
+                               </tbody>
+                          </table>
+                           
+
+                           <h6 className="text-teal-900 text-lg font-bold text-center mt-5"> Do You Want to Proceed? </h6>
                         </div>
                     </Stepper.Completed>
                 </Stepper>
@@ -286,12 +381,12 @@ export default function SellProductsForm({opened, onClose,  }:TsellProductsform,
                 <Center mt={50}>
                     {active>0?<Button mr={25} onClick={stepBack} >Back</Button>:<></>}
                     <Button 
+                        disabled={active==2? payable-paid==0? false:true:false}
                         onClick={()=>{
                             stepNext(); 
-                            console.log(orederdItemsForm.errors);
-                            console.log(paymentForm.errors);
+                            active==3&& handlefileupload(marchantForm.values.merchant, orederdItemsForm.values.orderdItems, paymentForm.values.selectedPayments)
                         }} 
-                            type={active == 4 ? 'submit':'button' 
+                            type={active == 3 ? 'submit':'button' 
                             }>Next</Button>
                 </Center>
         

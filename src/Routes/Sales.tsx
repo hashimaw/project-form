@@ -17,7 +17,7 @@ export default function Sales(){
             </Button> 
         </Center>
         
-        <SellProductsForm  opened={opened} onClose={close}/>
+        <SellProductsForm setDatabase={setDatabase} opened={opened} onClose={close}/>
 
         <Center mt={20}>
 
