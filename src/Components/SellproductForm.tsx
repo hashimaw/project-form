@@ -97,13 +97,6 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
             }
         })
 
-        // useEffect(()=>{
-        //         const total = calculateTotal();
-        //         setPayable(total);
-        // }, [orederdItemsForm.values.orderdItems])
-
-
-     
 
         const paymentForm = useForm<{ selectedPayments: IPayment[];
         }>({ mode: 'uncontrolled',
@@ -119,34 +112,6 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                 setPaid(total);
             }
         })
-
-
-        // const calculateTotal = () => {
-        //     let total = 0;
-        //     for (let i = 0; i < orederdItemsForm.values.orderdItems.length; i++) {
-        //       const item = orederdItemsForm.values.orderdItems[i];
-        //       total += item.sellingPrice * item.quantity;
-        //     }
-        //     console.log(total);
-        //     return total;
-        //   };
-          
-        //   const deductfromtotal = () => {
-        //     let total = 0;
-        //     for (let i = 0; i < paymentForm.values.selectedPayments.length; i++) {
-        //       const item = paymentForm.values.selectedPayments[i];
-        //       total += item.amount;
-        //     }
-        //     console.log(total);
-        //    setPaid(total);
-        //     return total;
-        //   };
-
-        // useEffect(()=>{
-        //     const total = deductfromtotal();
-        //     setPaid(total);
-        // }, [paymentForm.values.selectedPayments])
-          
 
 
         const addItem = () => {
@@ -214,6 +179,8 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                     console.log('allerror')
             }
         }
+
+        
         const stepBack = () => setAcitve((current) => (current > 0 ? current-1 : current))
 
     return(

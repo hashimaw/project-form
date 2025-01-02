@@ -2,6 +2,7 @@ import '@mantine/core/styles.css';
 import PageRouter from './PageRouter';
 import Navbar from './Navbar';
 import '@mantine/carousel/styles.css';
+import '@mantine/dates/styles.css';
 
 function App() {
 
