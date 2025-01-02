@@ -52,9 +52,11 @@ export default function Products(){
     
     return(
         <>
-        <Button onClick={open} variant='outline' leftSection={<IconSquareRoundedPlus size={18} />}>
-            Add Product
-        </Button>
+        <Center mt={20}>
+            <Button onClick={open} variant='outline' leftSection={<IconSquareRoundedPlus size={18} />}>
+                Add Product
+            </Button>
+        </Center>
         <AddProductForm opened={opened} onClose={close}/>
 
         <SimpleGrid

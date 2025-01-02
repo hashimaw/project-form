@@ -1,13 +1,16 @@
 import { Button, Center } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import SellProductsForm from "../Components/SellproductForm";
-import { useState } from "react";
 import { ISales } from "../interfaces/sales";
+import { useSelector } from 'react-redux';
+import { RootState } from "../Redux/store";
 
 
 export default function Sales(){
       const [opened, { open, close }] = useDisclosure(false);
-    const [database, setDatabase] = useState<ISales[]>([]);
+   // const [database, setDatabase] = useState<ISales[]>([]);
+    
+    const database = useSelector((state: RootState) => state.database); 
 
     return(
         <>
@@ -17,7 +20,7 @@ export default function Sales(){
             </Button> 
         </Center>
         
-        <SellProductsForm setDatabase={setDatabase} opened={opened} onClose={close}/>
+        <SellProductsForm opened={opened} onClose={close}/>
 
         <Center mt={20}>
 

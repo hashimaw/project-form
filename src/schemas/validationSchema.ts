@@ -39,3 +39,9 @@ import { z } from 'zod';
         payments: z.array(paymentSchema).nonempty("At least one payment is required")
       });
       
+      export const merchantSchema = z.object({
+        name: z.string().min(1, "Name is required"),
+        address: z.string().min(1, "Address is required"),
+        phone: z.string().min(1, "Phone number is required")
+      });
+      

@@ -8,11 +8,15 @@ import { ISales, IOrderedItem, IPayment } from "../interfaces/sales";
 import { zodResolver } from "@mantine/form";
 import { orderedItemSchema, paymentSchema } from "../schemas/validationSchema";
 import { z } from "zod";
+import { useDispatch, useSelector } from "react-redux";
+import { AddSales } from "../Redux/addSalesSlice";
+import { RootState } from "../Redux/store";
+import Merhcants from "../Routes/Merchants";
+import { IMerchant } from "../interfaces/marchant";
 
 type TsellProductsform = {
     opened: boolean
-    onClose: () => void
-    setDatabase: React.Dispatch<React.SetStateAction<ISales[]>>;
+    onClose: () => void;
 }
 
 interface ISelectorItem  {
@@ -29,7 +33,7 @@ const fetchProducts = async (page: number) => {
     return data
 }
 
-export default function SellProductsForm({opened, onClose, setDatabase  }:TsellProductsform, ){
+export default function SellProductsForm({opened, onClose }:TsellProductsform, ){
     const [page] = useState(1);
     const [items, setItems]= useState<any>([]);
     const [active, setAcitve] = useState(0)
@@ -38,15 +42,18 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
     const [orderedItems, setOrderedItems] = useState<IOrderedItem[]>([]);
     const [paymentOptions, setPaymentOptions] = useState<IPayment[]>([]);
     const [merchant, setMerchant] = useState('');
+    const [SelectableMerchants, setSelectableMerchants] = useState<any>([]);
 
-
+    const dispatch = useDispatch();
+    const merchants = useSelector((state: RootState) => state.merchant); 
+    
     const handlefileupload = (merchant:any,orderdItems:any,payments:any) => {
         const newSale: ISales = {
             merchant,
             orderdItems,
             payments,
           };
-          setDatabase((prev) => [...prev, newSale]);
+          dispatch(AddSales(newSale));;
         }
 
     
@@ -66,6 +73,15 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                 })));
             }
         }, [isFetched]);
+
+        useEffect(()=>{
+            if(merchants){
+            setSelectableMerchants(merchants.map((item: IMerchant) => ({
+                    label: item.name,
+                    value: item.id,
+                })));
+            }
+        }, []);
 
       
 
@@ -220,7 +236,7 @@ export default function SellProductsForm({opened, onClose, setDatabase  }:TsellP
                                 mb={10}
                                 label="Select a marchant"
                                 placeholder="merchant2"
-                                data={['marhcant1', 'marchant2', 'marhchant3']}
+                                data={SelectableMerchants}
                                 key={marchantForm.key('merchant')}
                                 {...marchantForm.getInputProps('merchant')}
                                 error={marchantForm.errors.merchant}
