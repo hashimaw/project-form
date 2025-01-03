@@ -17,7 +17,7 @@ export default function Products(){
 
 
   const fetchProducts = async (page: number) => {
-    const { data } = await axios.get(`https://test-api.nova-techs.com/products`, {
+    const { data } = await axios.get(`http://localhost:3000/items`, {
         params: { page },
     });
     return data;
@@ -64,7 +64,7 @@ export default function Products(){
           spacing={{ base: 10, sm: 'xl' }}
           verticalSpacing={{ base: 'md', sm: 'xl' }}
         >
-          {data.data.map((product: Product) => (
+          {data.map((product: Product) => (
             <Link className='no-underline' to={`/details/${product.id}` } >
                 <div id={product.id} className='hover:cursor-pointer hover:bg-slate-200 w-fit p-4 rounded-2xl mt-4'>
                 <img className='w-80 h-52 object-cover rounded-xl transition-all duration-700 ease-in-out hover:scale-105' src={product.imageUrls[0]} alt="" />

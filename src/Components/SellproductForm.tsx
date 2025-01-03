@@ -27,7 +27,7 @@ interface ISelectorItem  {
 
 
 const fetchProducts = async (page: number) => {
-    const { data } = await axios.get(`https://test-api.nova-techs.com/products`, {
+    const { data } = await axios.get(`http://localhost:3000/items`, {
         params: { page },
     });
     return data
@@ -67,7 +67,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
 
         useEffect(()=>{
             if (isFetched) {
-                setItems(data.data.map((item: ISelectorItem) => ({
+                setItems(data.map((item: ISelectorItem) => ({
                     label: item.name,
                     value: item.id,
                 })));

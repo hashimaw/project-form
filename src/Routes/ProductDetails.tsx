@@ -14,7 +14,7 @@ export function ProductDetails () {
   const productquery = useQuery({
     queryKey: ['product'],
     queryFn:()=>
-      fetch(`https://test-api.nova-techs.com/products/${id}`).then((res) =>
+      fetch(`http://localhost:3000/items/${id}`).then((res) =>
         res.json(),
       ),
       enabled: true,

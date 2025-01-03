@@ -1,0 +1,71 @@
+{
+    "items":[
+        {
+    "id": "1",
+    "name": "Organic Apple Juice",
+    "description": "Freshly squeezed organic apple juice with no added sugar.",
+    "price": 4.99,
+    "category": "Beverages",
+    "tags": ["organic", "juice", "apple", "beverage"],
+    "use": "Drink chilled or at room temperature.",
+    "minimumQuantity": 10,
+    "sellingPrice": 3.99,
+    "addedBy": "admin123",
+    "expiresAt": "2025-06-15T00:00:00Z",
+    "quantityOnHand": 150,
+    "reservedQuantity": 20,
+    "discount": 10,
+    "imageUrls": [
+      "https://example.com/images/apple-juice-1.jpg",
+      "https://example.com/images/apple-juice-2.jpg"
+    ],
+    "createdAt": "2024-12-01T10:30:00Z",
+    "updatedAt": "2025-01-01T15:45:00Z"
+  },
+  {
+    "id": "2",
+    "name": "Wireless Headphones",
+    "description": "Noise-canceling wireless headphones with 20 hours of battery life.",
+    "price": 129.99,
+    "category": "Electronics",
+    "tags": ["wireless", "headphones", "electronics", "audio"],
+    "use": "Pair with Bluetooth devices for high-quality audio.",
+    "minimumQuantity": 5,
+    "sellingPrice": 99.99,
+    "addedBy": "admin456",
+    "expiresAt": "2026-12-31T23:59:59Z",
+    "quantityOnHand": 50,
+    "reservedQuantity": 5,
+    "discount": 15,
+    "imageUrls": [
+      "https://example.com/images/headphones-1.jpg",
+      "https://example.com/images/headphones-2.jpg"
+    ],
+    "createdAt": "2024-11-15T09:00:00Z",
+    "updatedAt": "2025-01-02T12:00:00Z"
+  },
+  {
+    "id": "3",
+    "name": "Running Shoes",
+    "description": "Lightweight and durable running shoes for all terrains.",
+    "price": 89.99,
+    "category": "Footwear",
+    "tags": ["shoes", "running", "sports", "footwear"],
+    "use": "Ideal for running, walking, and daily use.",
+    "minimumQuantity": 8,
+    "sellingPrice": 74.99,
+    "addedBy": "admin789",
+    "expiresAt": "2026-05-20T00:00:00Z",
+    "quantityOnHand": 80,
+    "reservedQuantity": 10,
+    "discount": 20,
+    "imageUrls": [
+      "https://example.com/images/shoes-1.jpg",
+      "https://example.com/images/shoes-2.jpg"
+    ],
+    "createdAt": "2024-10-10T14:20:00Z",
+    "updatedAt": "2025-01-03T11:30:00Z"
+  }
+]
+}
+
