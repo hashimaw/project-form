@@ -70,15 +70,19 @@ export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
                         key={MerchantForm.key(`address`)}
                         {...MerchantForm.getInputProps(`address`)}
                         />
-                    <TextInput mb={7}
+                    <NumberInput mb={7}
                         label="Phone"
                         placeholder="+251"
+                        allowNegative={false}
+                        trimLeadingZeroesOnBlur={false}
+                        allowLeadingZeros={true}
+                        hideControls
                         key={MerchantForm.key(`phone`)}
                         {...MerchantForm.getInputProps(`phone`)}
                         />
 
                     <Center mt={20}>
-                        <Button onClick={()=>SetConfirmation(true)} type="submit">Submit</Button>
+                        <Button onClick={()=>{if(MerchantForm.isValid()){SetConfirmation(true)}}} type="submit">Submit</Button>
                     </Center>
 
                 </form>

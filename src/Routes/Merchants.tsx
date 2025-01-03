@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from "../Redux/store";
 import { BarChart } from "@mantine/charts";
 import { useEffect, useState } from "react";
+import '@mantine/charts/styles.css';
 
 
 export default function Merhcants(){
@@ -18,7 +19,7 @@ export default function Merhcants(){
         setChartData(sales.map((sale) => {
             const total = sale.orderdItems.reduce((sum, item) => sum + item.quantity * item.sellingPrice, 0);
             return {
-              merchant: sale.merchant,
+              merchant: merchants.find((merchant) => merchant.id === sale.merchant)?.name,
               totalSales: total,
             };
         }));
@@ -38,14 +39,6 @@ export default function Merhcants(){
         <AddMerchantForm opened={openMerchantForm} onClose={close}/>
 
         <Center mt={20}>
-            <BarChart
-                data={chartData}
-                h={300}
-                barProps={{ radius: 2 }}
-                dataKey="merchant" 
-                series={[{ name: 'totalSales', label: 'Total Sales' }]}
-                />
-
             <table className="border-collapse border-spacing-y-2">
                 <thead>
                     <tr className="text-teal-900 border text-lg font-semibold">
@@ -62,16 +55,33 @@ export default function Merhcants(){
                 {merchants.map((data: IMerchant , index) => (
                     <tr key={index} className="overflow-hidden border items-start">
                         <td className="content-start pl-2">{data.id}</td>
-                        <td className="content-start pl-2">{data.name}</td>
-                        <td className="content-start pl-2">{data.phone}</td>
-                        <td className="content-start pl-2">{data.address}</td>
+                        <td className="content-start">{data.name}</td>
+                        <td className="content-start">{data.phone}</td>
+                        <td className="content-start">{data.address}</td>
                     </tr>
                   ))}
                  </tbody>
             </table>
 
         </Center>      
-  
+        <div className="mt-10">
+        {
+                chartData.length === 0 ? <h1>You will see sales chart here when you have sells. and to be able to sell you need to create mercahnts</h1> : 
+                <BarChart
+                data={chartData}
+                h={400}
+                
+                dataKey="merchant" 
+                series={[
+                    { name: 'totalSales', color: 'violet.6' },
+                    { name: 'Laptops', color: 'blue.6' },
+                    { name: 'Tablets', color: 'teal.6' },
+                ]}
+                tickLine="y"
+                />
+            }
+        </div>
+      
         </>
     )
 }

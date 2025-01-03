@@ -259,6 +259,8 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
                                 <NumberInput mb={7}
                                     label="Quantity"
                                     placeholder="100"
+                                    allowNegative={false}
+                                    allowDecimal={false}
                                     trimLeadingZeroesOnBlur
                                     key={orederdItemsForm.key(`orderdItems.${index}.quantity`)}
                                     {...orederdItemsForm.getInputProps(`orderdItems.${index}.quantity`)}
@@ -267,7 +269,10 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
                                 <NumberInput mb={7}
                                     label="Selling Price"
                                     placeholder="Selling price"
+                                    allowNegative={false}
+                                    thousandSeparator=','
                                     trimLeadingZeroesOnBlur
+                                    allowLeadingZeros={false}
                                     prefix="$"
                                     key={orederdItemsForm.key(`orderdItems.${index}.sellingPrice`)}
                                     {...orederdItemsForm.getInputProps(`orderdItems.${index}.sellingPrice`)}
@@ -306,10 +311,10 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
                                     />
                                 <NumberInput mb={7}
                                     label="Ammount"
-                                    placeholder="0"
-                                    trimLeadingZeroesOnBlur
+                                    placeholder="amount you want to pay"
                                     prefix="$"
-                                    
+                                    allowLeadingZeros={false}
+                                    allowNegative={false}
                                     key={paymentForm.key(`selectedPayments.${index}.amount`)}
                                     {...paymentForm.getInputProps(`selectedPayments.${index}.amount`)}
                                     />

@@ -42,6 +42,13 @@ import { z } from 'zod';
       export const merchantSchema = z.object({
         name: z.string().min(1, "Name is required"),
         address: z.string().min(1, "Address is required"),
-        phone: z.string().min(1, "Phone number is required")
+        phone: z.any().transform((val) => {
+          // Convert to string and remove non-digits
+          const sanitized = String(val).replace(/\D+/g, '');
+          return sanitized;
+        })
+        .refine((val) => val.length >= 10 && val.length <= 15, {
+          message: 'Phone number must be between 10 and 15 digits',
+        })
       });
       
