@@ -63,7 +63,7 @@ export default function Sales(){
 
                 <tbody className="text-stone-900 text-base font-medium">
                 {data && data.map((data: any ) => (
-                    <tr key={data.id} className="overflow-hidden border items-start">
+                    <tr key={data.id} className="overflow-hidden border items-start align-top">
                         <td className="content-start pl-2">{merchants.find((item: { id: any; }) => item.id === data.merchant).name}</td>
                         <td>
                             {data.orderdItems.map((data:any)=>(
