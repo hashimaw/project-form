@@ -1,71 +1,377 @@
 {
-    "items":[
+  "items": [
+    {
+      "id": "1",
+      "name": "Organic Apple Juice",
+      "description": "Freshly squeezed organic apple juice with no added sugar.",
+      "price": 4.99,
+      "category": "Beverages",
+      "tags": [
+        "organic",
+        "juice",
+        "apple",
+        "beverage"
+      ],
+      "use": "Drink chilled or at room temperature.",
+      "minimumQuantity": 10,
+      "sellingPrice": 3.99,
+      "addedBy": "admin123",
+      "expiresAt": "2025-06-15T00:00:00Z",
+      "quantityOnHand": 150,
+      "reservedQuantity": 20,
+      "discount": 10,
+      "imageUrls": [
+        "https://example.com/images/apple-juice-1.jpg",
+        "https://example.com/images/apple-juice-2.jpg"
+      ],
+      "createdAt": "2024-12-01T10:30:00Z",
+      "updatedAt": "2025-01-01T15:45:00Z"
+    },
+    {
+      "id": "2",
+      "name": "Wireless Headphones",
+      "description": "Noise-canceling wireless headphones with 20 hours of battery life.",
+      "price": 129.99,
+      "category": "Electronics",
+      "tags": [
+        "wireless",
+        "headphones",
+        "electronics",
+        "audio"
+      ],
+      "use": "Pair with Bluetooth devices for high-quality audio.",
+      "minimumQuantity": 5,
+      "sellingPrice": 99.99,
+      "addedBy": "admin456",
+      "expiresAt": "2026-12-31T23:59:59Z",
+      "quantityOnHand": 50,
+      "reservedQuantity": 5,
+      "discount": 15,
+      "imageUrls": [
+        "https://example.com/images/headphones-1.jpg",
+        "https://example.com/images/headphones-2.jpg"
+      ],
+      "createdAt": "2024-11-15T09:00:00Z",
+      "updatedAt": "2025-01-02T12:00:00Z"
+    },
+    {
+      "id": "3",
+      "name": "Running Shoes",
+      "description": "Lightweight and durable running shoes for all terrains.",
+      "price": 89.99,
+      "category": "Footwear",
+      "tags": [
+        "shoes",
+        "running",
+        "sports",
+        "footwear"
+      ],
+      "use": "Ideal for running, walking, and daily use.",
+      "minimumQuantity": 8,
+      "sellingPrice": 74.99,
+      "addedBy": "admin789",
+      "expiresAt": "2026-05-20T00:00:00Z",
+      "quantityOnHand": 80,
+      "reservedQuantity": 10,
+      "discount": 20,
+      "imageUrls": [
+        "https://example.com/images/shoes-1.jpg",
+        "https://example.com/images/shoes-2.jpg"
+      ],
+      "createdAt": "2024-10-10T14:20:00Z",
+      "updatedAt": "2025-01-03T11:30:00Z"
+    },
+    {
+      "id": "9d22",
+      "name": "dfsafsd",
+      "description": "dsfaf",
+      "price": 5,
+      "category": "dsfsa",
+      "tags": [
+        "fs",
+        "f"
+      ],
+      "use": "fds",
+      "minimumQuantity": 5,
+      "sellingPrice": 8,
+      "addedBy": "fsdfd",
+      "expiresAt": "2025-01-29T21:00:00.000Z",
+      "quantityOnHand": 6,
+      "reservedQuantity": 1,
+      "discount": 1,
+      "imageUrls": [
+        "fsada"
+      ]
+    }
+  ],
+  "merchants": [
+    {
+      "id": "1",
+      "name": "merchant John.",
+      "address": "Addis Ababa",
+      "phone": "5745458854"
+    },
+    {
+      "id": "2",
+      "name": "merchant Doe.",
+      "address": "Addis Ababa",
+      "phone": "5745458854"
+    },
+    {
+      "id": "3",
+      "name": "merchant Jane.",
+      "address": "Addis Ababa",
+      "phone": "5745458854"
+    },
+    {
+      "id": "rcgwwn8oj",
+      "name": "Hashim the ",
+      "address": "hashim sefer",
+      "phone": "0669996234"
+    },
+    {
+      "id": "nwizjjjz7",
+      "name": "Big Purchaser",
+      "address": "Addis Ababa",
+      "phone": 2542666665565
+    }
+  ],
+  "sales": [
+    {
+      "merchant": "1",
+      "orderdItems": [
         {
-    "id": "1",
-    "name": "Organic Apple Juice",
-    "description": "Freshly squeezed organic apple juice with no added sugar.",
-    "price": 4.99,
-    "category": "Beverages",
-    "tags": ["organic", "juice", "apple", "beverage"],
-    "use": "Drink chilled or at room temperature.",
-    "minimumQuantity": 10,
-    "sellingPrice": 3.99,
-    "addedBy": "admin123",
-    "expiresAt": "2025-06-15T00:00:00Z",
-    "quantityOnHand": 150,
-    "reservedQuantity": 20,
-    "discount": 10,
-    "imageUrls": [
-      "https://example.com/images/apple-juice-1.jpg",
-      "https://example.com/images/apple-juice-2.jpg"
-    ],
-    "createdAt": "2024-12-01T10:30:00Z",
-    "updatedAt": "2025-01-01T15:45:00Z"
-  },
-  {
-    "id": "2",
-    "name": "Wireless Headphones",
-    "description": "Noise-canceling wireless headphones with 20 hours of battery life.",
-    "price": 129.99,
-    "category": "Electronics",
-    "tags": ["wireless", "headphones", "electronics", "audio"],
-    "use": "Pair with Bluetooth devices for high-quality audio.",
-    "minimumQuantity": 5,
-    "sellingPrice": 99.99,
-    "addedBy": "admin456",
-    "expiresAt": "2026-12-31T23:59:59Z",
-    "quantityOnHand": 50,
-    "reservedQuantity": 5,
-    "discount": 15,
-    "imageUrls": [
-      "https://example.com/images/headphones-1.jpg",
-      "https://example.com/images/headphones-2.jpg"
-    ],
-    "createdAt": "2024-11-15T09:00:00Z",
-    "updatedAt": "2025-01-02T12:00:00Z"
-  },
-  {
-    "id": "3",
-    "name": "Running Shoes",
-    "description": "Lightweight and durable running shoes for all terrains.",
-    "price": 89.99,
-    "category": "Footwear",
-    "tags": ["shoes", "running", "sports", "footwear"],
-    "use": "Ideal for running, walking, and daily use.",
-    "minimumQuantity": 8,
-    "sellingPrice": 74.99,
-    "addedBy": "admin789",
-    "expiresAt": "2026-05-20T00:00:00Z",
-    "quantityOnHand": 80,
-    "reservedQuantity": 10,
-    "discount": 20,
-    "imageUrls": [
-      "https://example.com/images/shoes-1.jpg",
-      "https://example.com/images/shoes-2.jpg"
-    ],
-    "createdAt": "2024-10-10T14:20:00Z",
-    "updatedAt": "2025-01-03T11:30:00Z"
-  }
-]
+          "id": "1",
+          "quantity": 12,
+          "sellingPrice": 12
+        },
+        {
+          "id": "2",
+          "quantity": 32,
+          "sellingPrice": 3
+        }
+      ],
+      "payments": [
+        {
+          "amount": 233,
+          "accountNumber": "eqweSAD",
+          "bank": "CBE",
+          "date": "2025-01-08T08:24:28.459Z"
+        },
+        {
+          "amount": 7,
+          "accountNumber": "23sdSA",
+          "bank": "Dashen Bank",
+          "date": "2025-01-08T08:25:23.963Z"
+        }
+      ]
+    },
+    {
+      "id": "cde5",
+      "merchant": "1",
+      "orderdItems": [
+        {
+          "id": "9d22",
+          "quantity": 5,
+          "sellingPrice": 4
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "fasda",
+          "bank": "Dashen Bank",
+          "amount": 20,
+          "date": "2025-01-08T08:41:40.212Z"
+        }
+      ]
+    },
+    {
+      "id": "bb8e",
+      "merchant": "2",
+      "orderdItems": [
+        {
+          "id": "3",
+          "quantity": 1,
+          "sellingPrice": 1
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "dweef",
+          "bank": "Dashen Bank",
+          "amount": 1,
+          "date": "2025-01-08T08:51:56.565Z"
+        }
+      ]
+    },
+    {
+      "id": "cda2",
+      "merchant": "rcgwwn8oj",
+      "orderdItems": [
+        {
+          "id": "1",
+          "quantity": 5,
+          "sellingPrice": 6
+        },
+        {
+          "id": "2",
+          "quantity": 4,
+          "sellingPrice": 5
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "4332133",
+          "bank": "CBE",
+          "amount": 10,
+          "date": "2025-01-08T09:38:22.117Z"
+        },
+        {
+          "amount": 40,
+          "accountNumber": "hjbhjnnnnnnnnnnjj",
+          "bank": "Abyssinia Bank",
+          "date": "2025-01-08T09:39:26.556Z"
+        }
+      ]
+    },
+    {
+      "id": "1b60",
+      "merchant": "rcgwwn8oj",
+      "orderdItems": [
+        {
+          "id": "1",
+          "quantity": 5,
+          "sellingPrice": 6
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "4123232",
+          "bank": "CBE",
+          "amount": 30,
+          "date": "2025-01-08T09:38:22.117Z"
+        }
+      ]
+    },
+    {
+      "id": "a777",
+      "merchant": "3",
+      "orderdItems": [
+        {
+          "id": "3",
+          "quantity": 5,
+          "sellingPrice": 5
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "rgrttt",
+          "bank": "Awash Bank",
+          "amount": 25,
+          "date": "2025-01-08T12:29:06.128Z"
+        }
+      ]
+    },
+    {
+      "id": "4b31",
+      "merchant": "3",
+      "orderdItems": [
+        {
+          "id": "2",
+          "quantity": 6,
+          "sellingPrice": 2
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "524424",
+          "bank": "Anbessa Bank",
+          "amount": 12,
+          "date": "2025-01-08T12:30:02.834Z"
+        }
+      ]
+    },
+    {
+      "id": "dc18",
+      "merchant": "nwizjjjz7",
+      "orderdItems": [
+        {
+          "id": "2",
+          "quantity": 4,
+          "sellingPrice": 2
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "fdsaafd",
+          "bank": "Abyssinia Bank",
+          "amount": 8,
+          "date": "2025-01-08T13:18:52.966Z"
+        }
+      ]
+    },
+    {
+      "id": "5337",
+      "merchant": "1",
+      "orderdItems": [
+        {
+          "id": "1",
+          "quantity": 10,
+          "sellingPrice": 30
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "sgrgtfsdgf",
+          "bank": "Dashen Bank",
+          "amount": 300,
+          "date": "2025-01-08T13:48:34.949Z"
+        }
+      ]
+    },
+    {
+      "id": "1685",
+      "merchant": "2",
+      "orderdItems": [
+        {
+          "id": "9d22",
+          "quantity": 4,
+          "sellingPrice": 4
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "dsafsaf",
+          "bank": "Dashen Bank",
+          "amount": 16,
+          "date": "2025-01-08T13:54:52.301Z"
+        }
+      ]
+    },
+    {
+      "id": "c95d",
+      "merchant": "2",
+      "orderdItems": [
+        {
+          "id": "3",
+          "quantity": 10,
+          "sellingPrice": 10
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "56666666665",
+          "bank": "Anbessa Bank",
+          "amount": 50,
+          "date": "2025-01-08T13:55:58.830Z"
+        },
+        {
+          "amount": 50,
+          "accountNumber": "4465555545",
+          "bank": "CBE",
+          "date": "2025-01-08T13:56:33.922Z"
+        }
+      ]
+    }
+  ]
 }
-

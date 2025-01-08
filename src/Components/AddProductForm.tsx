@@ -37,7 +37,7 @@ export default function AddProductForm({opened, onClose}: TProductForm){
 
     const createProduct = async (newPost: Product) => {
         try {
-            const { data } = await axios.post(`https://test-api.nova-techs.com/products`, newPost);
+            const { data } = await axios.post(`http://localhost:3000/items`, newPost);
             return data; 
         } catch (error: any) {
           

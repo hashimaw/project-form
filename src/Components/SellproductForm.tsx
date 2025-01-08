@@ -1,5 +1,5 @@
-import { Modal, Select, Button, Center, Stepper, NumberInput, TextInput } from "@mantine/core"
-import { useQuery } from "@tanstack/react-query"
+import { Modal, Select, Button, Center, Stepper, NumberInput, TextInput, LoadingOverlay } from "@mantine/core"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { DateInput } from '@mantine/dates';
 import { useState, useEffect } from "react"
@@ -8,10 +8,6 @@ import { ISales, IOrderedItem, IPayment } from "../interfaces/sales";
 import { zodResolver } from "@mantine/form";
 import { orderedItemSchema, paymentSchema } from "../schemas/validationSchema";
 import { z } from "zod";
-import { useDispatch, useSelector } from "react-redux";
-import { AddSales } from "../Redux/addSalesSlice";
-import { RootState } from "../Redux/store";
-import Merhcants from "../Routes/Merchants";
 import { IMerchant } from "../interfaces/marchant";
 
 type TsellProductsform = {
@@ -25,14 +21,6 @@ interface ISelectorItem  {
 }
   
 
-
-const fetchProducts = async (page: number) => {
-    const { data } = await axios.get(`http://localhost:3000/items`, {
-        params: { page },
-    });
-    return data
-}
-
 export default function SellProductsForm({opened, onClose }:TsellProductsform, ){
     const [page] = useState(1);
     const [items, setItems]= useState<any>([]);
@@ -41,49 +29,82 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
     const [paid, setPaid] = useState(0);
     const [orderedItems, setOrderedItems] = useState<IOrderedItem[]>([]);
     const [paymentOptions, setPaymentOptions] = useState<IPayment[]>([]);
-    const [merchant, setMerchant] = useState('');
+    const [selectedMerchant, setMerchant] = useState('');
     const [SelectableMerchants, setSelectableMerchants] = useState<any>([]);
-
-    const dispatch = useDispatch();
-    const merchants = useSelector((state: RootState) => state.merchant); 
+    const queryClient = useQueryClient();
     
-    const handlefileupload = (merchant:any,orderdItems:any,payments:any) => {
-        const newSale: ISales = {
-            merchant,
-            orderdItems,
-            payments,
-          };
-          dispatch(AddSales(newSale));;
-        }
-
+    const fetchMerchants = async () => {
+        const { data } = await axios.get(`http://localhost:3000/merchants`);
+        return data;
+    };
+        const { isFetched:merchantIsFetched, error, data:merchants } = useQuery({
+            queryKey: ['merchants'],
+            queryFn: () => fetchMerchants(),
+                enabled: true,
+            })
     
-    
+        const fetchProducts = async () => {
+            const { data } = await axios.get(`http://localhost:3000/items`);
+            return data;
+        };
 
-    const { isFetched, data } = useQuery({
+    const { isFetched, data:products } = useQuery({
         queryKey: ['products', page],
-        queryFn: () => fetchProducts(page),
+        queryFn: () => fetchProducts(),
             enabled: true,
         })
 
         useEffect(()=>{
             if (isFetched) {
-                setItems(data.map((item: ISelectorItem) => ({
+                setItems(products.map((item: ISelectorItem) => ({
                     label: item.name,
                     value: item.id,
                 })));
             }
         }, [isFetched]);
 
+
         useEffect(()=>{
-            if(merchants){
+            if(merchantIsFetched){
             setSelectableMerchants(merchants.map((item: IMerchant) => ({
                     label: item.name,
                     value: item.id,
                 })));
             }
-        }, []);
+        }, [merchantIsFetched]);
 
-      
+        const createProduct = async (newPost: ISales) => {
+            try {
+                const { data } = await axios.post(`http://localhost:3000/sales`, newPost);
+                return data; 
+            } catch (error: any) {
+              
+                throw error.response?.data || new Error('Failed to create product');
+            }
+        };
+    
+        const { isPending:fileUploadPending, isError:fileUploadError, mutate } = useMutation({
+            mutationFn: (newPost: ISales) => createProduct(newPost),
+              onError:()=>{},
+              onSuccess:() => {
+                queryClient.invalidateQueries({queryKey: ["sales"]});
+                onClose(); 
+                orederdItemsForm.reset(); 
+                marchantForm.reset(); 
+                paymentForm.reset();
+                setAcitve(0)
+              }
+          })
+    
+
+        const handlefileupload = (merchant:any,orderdItems:any, payments:any) => {
+            const newSale: ISales = {
+                merchant,
+                orderdItems,
+                payments,
+              };
+              mutate(newSale);
+            }
 
         const merchantSchema = z.object({
             merchant: z.string().min(1, "Please Select Merchant")
@@ -138,7 +159,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
             orederdItemsForm.removeListItem('orderdItems', index);
         };
         const addPaymentOption = ( ) => {
-            paymentForm.insertListItem('selectedPayments', { accountNumber:'', bank:'', amount:0, date: new Date() });
+            paymentForm.insertListItem('selectedPayments', { amount:0, accountNumber:'', bank:'', date: new Date() });
         };
 
         const removePaymentOption = ( index: number) => {
@@ -210,7 +231,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
                 setAcitve(0)
             }} title='Sell Product' >
            
-            <Modal opened={active==4} 
+            <Modal opened={!fileUploadPending && active==4} 
                 onClose={() => {
                     onClose(); 
                     orederdItemsForm.reset(); 
@@ -227,7 +248,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
                 }}>OK</Button>
             </Modal>
 
-           
+           <LoadingOverlay visible={fileUploadPending}/>
                 <Stepper iconSize={32} active={active} onStepClick={setAcitve} >
                     
                     <Stepper.Step label='Select marchant' >
@@ -337,7 +358,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
 
                     <Stepper.Completed>
                         <div>
-                           Selling the following Products for {merchant}
+                           Selling the following Products for {selectedMerchant}
                            <table className="border-collapse mt-1 mb-10 border-spacing-y-2">
                               <thead>
                                   <tr className="text-teal-900 border text-lg font-semibold">
@@ -395,7 +416,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
                         disabled={active==2? payable-paid==0? false:true:false}
                         onClick={()=>{
                             stepNext(); 
-                            active==3&& handlefileupload(merchant, orderedItems, paymentOptions)
+                            active==3&& handlefileupload(selectedMerchant, orderedItems, paymentOptions)
                         }} 
                             type={active == 3 ? 'submit':'button' 
                             }>Next</Button>

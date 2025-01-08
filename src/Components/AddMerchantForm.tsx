@@ -1,11 +1,12 @@
-import { Modal, Button, Center, NumberInput, TextInput } from "@mantine/core";
+import { Modal, Button, Center, NumberInput, TextInput, LoadingOverlay } from "@mantine/core";
 import { useState } from "react";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "@mantine/form";
-import { useDispatch } from "react-redux";
 import { IMerchant } from "../interfaces/marchant";
-import { AddMerchant } from "../Redux/addMarchantSlice";
 import { merchantSchema } from "../schemas/validationSchema";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
 
 type TAddMerchantform = {
     opened: boolean
@@ -14,18 +15,36 @@ type TAddMerchantform = {
   
 export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
 
-    const dispatch = useDispatch();
-    const [confirmation, SetConfirmation] = useState(false);
- 
+    const queryClient = useQueryClient();
+
+    const createMerchant = async (newPost: IMerchant) => {
+        try {
+            const { data } = await axios.post(`http://localhost:3000/merchants`, newPost);
+            return data; 
+        } catch (error: any) {
+          
+            throw error.response?.data || new Error('Failed to create product');
+        }
+    };
+
+    const { isPending:fileUploadPending, isError:fileUploadError, mutate } = useMutation({
+        mutationFn: (newPost: IMerchant) => createMerchant(newPost),
+          onError:()=>{},
+          onSuccess:() => {
+            queryClient.invalidateQueries({queryKey: ["merchants"]});
+            onClose();
+            MerchantForm.reset();
+          }
+      })
+
     const handlefileupload = (merchant:any) => {
         const newSale: IMerchant = {
             id: Math.random().toString(36).substr(2, 9),
             name: merchant.name,
             address: merchant.address,
             phone: merchant.phone,
-           
           };
-          dispatch(AddMerchant(newSale));
+         mutate(newSale);
         }
 
 
@@ -43,19 +62,7 @@ export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
                 onClose(); 
                 MerchantForm.reset();
             }} title='Merchant Add Form' >
-                <Modal opened={confirmation} 
-                onClose={() => {
-                    onClose(); 
-                    MerchantForm.reset();
-                    }}
-                title='Form recorderd successfully'>
-                <Button 
-                onClick={()=>{
-                    onClose(); 
-                    MerchantForm.reset(); 
-                    SetConfirmation(false);
-                }}>OK</Button>
-            </Modal >
+                <LoadingOverlay visible={fileUploadPending} />
                 <form onSubmit={MerchantForm.onSubmit((values)=>{handlefileupload(values); console.log(values);})}>
 
                     <TextInput mb={7}
@@ -82,7 +89,7 @@ export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
                         />
 
                     <Center mt={20}>
-                        <Button onClick={()=>{if(MerchantForm.isValid()){SetConfirmation(true)}}} type="submit">Submit</Button>
+                        <Button  type="submit">Submit</Button>
                     </Center>
 
                 </form>
