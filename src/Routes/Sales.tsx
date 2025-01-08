@@ -11,7 +11,7 @@ export default function Sales(){
     const { data } = await axios.get(`http://localhost:3000/sales`);
     return data;
 };
-    const { isPending, error, data } = useQuery({
+    const { data } = useQuery({
         queryKey: ['sales'],
         queryFn: () => fetchSales(),
             enabled: true,
@@ -21,7 +21,7 @@ export default function Sales(){
             const { data } = await axios.get(`http://localhost:3000/merchants`);
             return data;
         };
-            const { isFetched:merchantIsFetched, data:merchants } = useQuery({
+            const { data:merchants } = useQuery({
                 queryKey: ['merchants'],
                 queryFn: () => fetchMerchants(),
                     enabled: true,

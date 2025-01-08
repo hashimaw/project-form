@@ -37,7 +37,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
         const { data } = await axios.get(`http://localhost:3000/merchants`);
         return data;
     };
-        const { isFetched:merchantIsFetched, error, data:merchants } = useQuery({
+        const { isFetched:merchantIsFetched, data:merchants } = useQuery({
             queryKey: ['merchants'],
             queryFn: () => fetchMerchants(),
                 enabled: true,
@@ -83,7 +83,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
             }
         };
     
-        const { isPending:fileUploadPending, isError:fileUploadError, mutate } = useMutation({
+        const { isPending:fileUploadPending, mutate } = useMutation({
             mutationFn: (newPost: ISales) => createProduct(newPost),
               onError:()=>{},
               onSuccess:() => {
@@ -230,23 +230,6 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
                 paymentForm.reset();
                 setAcitve(0)
             }} title='Sell Product' >
-           
-            <Modal opened={!fileUploadPending && active==4} 
-                onClose={() => {
-                    onClose(); 
-                    orederdItemsForm.reset(); 
-                    setAcitve(0)
-                    }} 
-                title='Form recorderd successfully'>
-                <Button 
-                onClick={()=>{
-                    onClose(); 
-                    orederdItemsForm.reset(); 
-                    marchantForm.reset(); 
-                    paymentForm.reset();
-                    setAcitve(0)
-                }}>OK</Button>
-            </Modal>
 
            <LoadingOverlay visible={fileUploadPending}/>
                 <Stepper iconSize={32} active={active} onStepClick={setAcitve} >

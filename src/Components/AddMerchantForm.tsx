@@ -1,5 +1,4 @@
 import { Modal, Button, Center, NumberInput, TextInput, LoadingOverlay } from "@mantine/core";
-import { useState } from "react";
 import { useForm } from "@mantine/form";
 import { zodResolver } from "@mantine/form";
 import { IMerchant } from "../interfaces/marchant";
@@ -27,7 +26,7 @@ export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
         }
     };
 
-    const { isPending:fileUploadPending, isError:fileUploadError, mutate } = useMutation({
+    const { isPending:fileUploadPending, mutate } = useMutation({
         mutationFn: (newPost: IMerchant) => createMerchant(newPost),
           onError:()=>{},
           onSuccess:() => {

@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import '@mantine/charts/styles.css';
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { data } from "react-router-dom";
 
 
 export default function Merhcants(){
@@ -18,7 +17,7 @@ export default function Merhcants(){
         const { data } = await axios.get(`http://localhost:3000/merchants`);
         return data;
     };
-        const { isFetched:merchantIsFetched, data:merchants } = useQuery({
+        const { data:merchants } = useQuery({
             queryKey: ['merchants'],
             queryFn: () => fetchMerchants(),
                 enabled: true,
