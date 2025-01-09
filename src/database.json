@@ -83,10 +83,10 @@
     },
     {
       "id": "9d22",
-      "name": "dfsafsd",
-      "description": "dsfaf",
+      "name": "Bluetooth Speakers",
+      "description": "nice Material",
       "price": 5,
-      "category": "dsfsa",
+      "category": "Electronics",
       "tags": [
         "fs",
         "f"
@@ -94,7 +94,7 @@
       "use": "fds",
       "minimumQuantity": 5,
       "sellingPrice": 8,
-      "addedBy": "fsdfd",
+      "addedBy": "someone",
       "expiresAt": "2025-01-29T21:00:00.000Z",
       "quantityOnHand": 6,
       "reservedQuantity": 1,
@@ -107,33 +107,39 @@
   "merchants": [
     {
       "id": "1",
-      "name": "merchant John.",
+      "name": "merchant John",
       "address": "Addis Ababa",
       "phone": "5745458854"
     },
     {
       "id": "2",
-      "name": "merchant Doe.",
-      "address": "Addis Ababa",
+      "name": "merchant Doe",
+      "address": "Dire Dawa",
       "phone": "5745458854"
     },
     {
       "id": "3",
-      "name": "merchant Jane.",
-      "address": "Addis Ababa",
+      "name": "merchant Jane",
+      "address": "Gonder",
       "phone": "5745458854"
     },
     {
       "id": "rcgwwn8oj",
       "name": "Hashim the ",
-      "address": "hashim sefer",
+      "address": "Hawassa bellema",
       "phone": "0669996234"
     },
     {
       "id": "nwizjjjz7",
       "name": "Big Purchaser",
-      "address": "Addis Ababa",
+      "address": "Mekelle",
       "phone": 2542666665565
+    },
+    {
+      "id": "1v9zplgmh",
+      "name": "New Guy",
+      "address": "Gumuz",
+      "phone": 23323232323
     }
   ],
   "sales": [
@@ -164,7 +170,8 @@
           "bank": "Dashen Bank",
           "date": "2025-01-08T08:25:23.963Z"
         }
-      ]
+      ],
+      "id": "d5a1"
     },
     {
       "id": "cde5",
@@ -389,6 +396,25 @@
           "bank": "Anbessa Bank",
           "amount": 500,
           "date": "2025-01-08T14:24:16.004Z"
+        }
+      ]
+    },
+    {
+      "id": "2d2a",
+      "merchant": "nwizjjjz7",
+      "orderdItems": [
+        {
+          "id": "2",
+          "quantity": 10,
+          "sellingPrice": 10
+        }
+      ],
+      "payments": [
+        {
+          "accountNumber": "5656549855",
+          "bank": "CBE",
+          "amount": 100,
+          "date": "2025-01-09T10:43:07.220Z"
         }
       ]
     }

@@ -41,7 +41,7 @@ export function EditProduct ({ product }: ProductProps) {
 
   const editProduct = async (newPost: Product) => {
     try {
-        const { data } = await axios.patch(`https://test-api.nova-techs.com/products/${product.id}`, newPost);
+        const { data } = await axios.patch(`http://localhost:3000/items/${product.id}`, newPost);
         return data; 
     } catch (error: any) {
       

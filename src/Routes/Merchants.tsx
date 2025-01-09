@@ -1,4 +1,4 @@
-import { Button, Center } from "@mantine/core"
+import { Button, Center, ActionIcon } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import AddMerchantForm from "../Components/AddMerchantForm";
 import { IMerchant } from "../interfaces/marchant";
@@ -7,10 +7,12 @@ import { useEffect, useState } from "react";
 import '@mantine/charts/styles.css';
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-
+import { IconTrash, IconEdit } from "@tabler/icons-react";
+import EditMerchantForm from "../Components/EditMerchantForm";
 
 export default function Merhcants(){
       const [openMerchantForm, { open, close }] = useDisclosure(false);
+
       const [chartData, setChartData] = useState<any>([])
 
       const fetchMerchants = async () => {
@@ -104,7 +106,7 @@ const idMap = fetchedProducts?.reduce((acc: Record<string, string>, item:any) =>
   }, {});
   
   // Substitute keys and merchant values
-  const finedChartData = chartData.map((entry:any) => {
+  const finedChartData = chartData?.map((entry:any) => {
     const newEntry: any = {};
   
     Object.keys(entry).forEach((key) => {
@@ -146,23 +148,37 @@ const idMap = fetchedProducts?.reduce((acc: Record<string, string>, item:any) =>
         <Center mt={20}>
             <table className="border-collapse border-spacing-y-2">
                 <thead>
-                    <tr className="text-teal-900 border text-lg font-semibold">
-                        <th className="w-40 py-3 pl-2 text-start">Marchant ID</th>
-                        <th className="w-80 py-3 text-start">Merhcant Name</th>
+                    <tr className="text-teal-900 bg-cyan-300 border text-base font-semibold">
+                        <th className="w-48 py-3 pl-5 text-start">Marchant ID</th>
+                        <th className="w-60 py-3 text-start">Merhcant Name</th>
                         <th className="w-40 py-3 text-start">Phone</th>
                         <th className="w-40 py-3 text-start">Address</th>
-                        <th className="w-52 text-start"></th>
+                        <th className="w-28 py-3 text-start">Action</th>
                     </tr>
                     <tr></tr>
                 </thead>
 
-                <tbody className="text-stone-900 text-base font-medium">
+                <tbody className="text-stone-900 text-sm font-medium">
                 {merchants && merchants.map((data: IMerchant, index:number ) => (
-                    <tr key={index} className="overflow-hidden border items-start">
-                        <td className="content-start pl-2">{data.id}</td>
-                        <td className="content-start">{data.name}</td>
-                        <td className="content-start">{data.phone}</td>
-                        <td className="content-start">{data.address}</td>
+                    <tr key={index} className="odd:bg-stone-200 even:bg-stone-50 overflow-hidden  border items-start">
+                        <td className="content-start py-2 pl-5">{data.id}</td>
+                        <td className="content-start py-2">{data.name}</td>
+                        <td className="content-start py-2">{data.phone}</td>
+                        <td className="content-start py-2">{data.address}</td>
+                        <td className="content-start flex gap-4 py-2">
+                            
+                                <EditMerchantForm merchant={data} />
+                            
+
+                            <ActionIcon
+                                title="Delete"
+                                color="red"
+                                variant="outline"
+                                size={25}
+                                >
+                                <IconTrash />
+                            </ActionIcon>
+                            </td>
                     </tr>
                   ))}
                  </tbody>
