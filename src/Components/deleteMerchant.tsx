@@ -92,7 +92,7 @@ useEffect(() => {
           key={form.key('deleteItem')}
           {...form.getInputProps('deleteItem')}
           /> 
-          <Center mt={20}> <Button disabled={merchantHasSales} type='submit' variant="filled">Delete Merchant</Button></Center>
+          <Center mt={20}> <Button color='red' disabled={merchantHasSales} type='submit' variant="filled">Delete Merchant</Button></Center>
              
         </form>
       </Modal>

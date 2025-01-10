@@ -61,7 +61,7 @@ export function DeleteProduct ({ product }: ProductProps) {
           key={form.key('deleteItem')}
           {...form.getInputProps('deleteItem')}
           /> 
-          <Center mt={20}> <Button type='submit' variant="filled">Delete Product</Button></Center>
+          <Center mt={20}> <Button type='submit' color='red' variant="filled">Delete Product</Button></Center>
              
         </form>
       </Modal>
