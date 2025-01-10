@@ -22,12 +22,17 @@ This is a modern web application built with Vite, React, Tailwind CSS, Mantine, 
 root/
 ├── public/              # Static files
 ├── src/
+│   ├── assets/          # project assets
 │   ├── components/      # React components
-│   ├── pages/           # Page components
+│   ├── interfaces/      # interfaces typescript types
 │   ├── redux/           # Redux store, slices, and hooks
-│   ├── styles/          # Tailwind CSS styles or additional styles
-│   ├── App.jsx          # Main React component
-│   └── main.jsx         # Application entry point
+│   ├── routes/          # project routes
+│   ├── schemas/         # zod schemas
+│   ├── App.tsx          # Main React component
+│   ├── index.css        # styles
+│   ├── main.tsx         # Application entry point
+│   ├── Navbar.tsx       # navigartion bar
+│   └── PageRouter.tsx   # routing of the pages
 ├── database.json        # Mock JSON data served by json-server
 ├── package.json         # Project dependencies and scripts
 └── README.md            # Project documentation
