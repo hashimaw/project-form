@@ -3,7 +3,6 @@ import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { IconTrash } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { IMerchant } from '../interfaces/marchant';
 import { useState, useEffect } from 'react';
@@ -18,7 +17,7 @@ export function DeleteMerchant ({ merchant }: TDeleteMerchant) {
   const [opened, { open, close }] = useDisclosure(false);
   const [merchantHasSales, setMerchantHasSales] = useState<boolean>(false);
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+
   const api = useSelector((state:any) => state.apiLink);
 
   const fetchSales = async () => {
@@ -59,10 +58,9 @@ useEffect(() => {
     mutationFn: () => deleteProduct(),
       onError:()=>{open()},
       onSuccess:() => {
-        queryClient.invalidateQueries({queryKey: ["product"]});
+        queryClient.invalidateQueries({queryKey: ["merchants"]});
         form.reset();
         close();
-        navigate('/');
       }
   })
 

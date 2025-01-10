@@ -5,6 +5,7 @@ import { useForm } from '@mantine/form';
 import { IconTrash } from '@tabler/icons-react';
 import axios from 'axios';
 import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 interface Product {id:string, name: string; description: string; price: number; category: string; tags: string[]; use: string; minimumQuantity: number; sellingPrice: number; addedBy: string; expiresAt: Date; quantityOnHand: number; reservedQuantity: number; discount: number; imageUrls: string[];}
 interface ProductProps { product: Product; }
@@ -13,6 +14,7 @@ export function DeleteProduct ({ product }: ProductProps) {
 
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const api = useSelector((state:any) => state.apiLink);
 
@@ -38,9 +40,10 @@ export function DeleteProduct ({ product }: ProductProps) {
     mutationFn: () => deleteProduct(),
       onError:()=>{open()},
       onSuccess:() => {
-        queryClient.invalidateQueries({queryKey: ["merchant"]});
+        queryClient.invalidateQueries({queryKey: ["products"]});
         form.reset();
         close();
+        navigate('/');
       }
   })
 
