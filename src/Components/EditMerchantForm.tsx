@@ -7,6 +7,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { IconEdit } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
 
 type TEditMerchantform = {
     merchant: IMerchant;
@@ -19,7 +21,7 @@ export default function EditMerchantForm({merchant }:TEditMerchantform ){
 
     const editMerchant = async (newPost: IMerchant) => {
         try {
-            const { data } = await axios.patch(`http://localhost:3000/merchants/${merchant.id}`, newPost);
+            const { data } = await axios.patch(`${api}${merchant.id}`, newPost);
             return data;
         } catch (error: any) {
           

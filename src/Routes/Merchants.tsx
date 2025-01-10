@@ -1,4 +1,4 @@
-import { Button, Center, ActionIcon } from "@mantine/core"
+import { Button, Center } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import AddMerchantForm from "../Components/AddMerchantForm";
 import { IMerchant } from "../interfaces/marchant";
@@ -7,8 +7,11 @@ import { useEffect, useState } from "react";
 import '@mantine/charts/styles.css';
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { IconTrash, IconEdit } from "@tabler/icons-react";
 import EditMerchantForm from "../Components/EditMerchantForm";
+import { DeleteMerchant } from "../Components/deleteMerchant";
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
+
 
 export default function Merhcants(){
       const [openMerchantForm, { open, close }] = useDisclosure(false);
@@ -16,7 +19,7 @@ export default function Merhcants(){
       const [chartData, setChartData] = useState<any>([])
 
       const fetchMerchants = async () => {
-        const { data } = await axios.get(`http://localhost:3000/merchants`);
+        const { data } = await axios.get(`${api}merchants`);
         return data;
     };
         const { data:merchants } = useQuery({
@@ -41,19 +44,22 @@ let arrayOfColors = [
     'orange',
     'brown',
 ]
-            const fetchSales = async () => {
-                const { data } = await axios.get(`http://localhost:3000/sales`);
-                return data;
-            };
-                const { data:sales } = useQuery({
-                    queryKey: ['sales'],
-                    queryFn: () => fetchSales(),
-                        enabled: true,
-                    })
+        
+
+
+        const fetchSales = async () => {
+            const { data } = await axios.get(`${api}sales`);
+            return data;
+        };
+        const { data:sales } = useQuery({
+            queryKey: ['sales'],
+            queryFn: () => fetchSales(),
+                enabled: true,
+            })
 
 
                     const fetchProducts = async () => {
-                        const { data } = await axios.get(`http://localhost:3000/items`);
+                        const { data } = await axios.get(`${api}items`);
                         return data;
                     };
                         const { data:fetchedProducts } = useQuery({
@@ -168,16 +174,7 @@ const idMap = fetchedProducts?.reduce((acc: Record<string, string>, item:any) =>
                         <td className="content-start flex gap-4 py-2">
                             
                                 <EditMerchantForm merchant={data} />
-                            
-
-                            <ActionIcon
-                                title="Delete"
-                                color="red"
-                                variant="outline"
-                                size={25}
-                                >
-                                <IconTrash />
-                            </ActionIcon>
+                                <DeleteMerchant merchant={data} />
                             </td>
                     </tr>
                   ))}

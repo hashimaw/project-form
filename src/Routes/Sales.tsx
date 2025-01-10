@@ -1,15 +1,15 @@
-import { Button, Center, ActionIcon } from "@mantine/core"
+import { Button, Center } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import SellProductsForm from "../Components/SellproductForm";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { IconChecks } from "@tabler/icons-react";
+import { useSelector } from "react-redux";
 
 export default function Sales(){
       const [opened, { open, close }] = useDisclosure(false);
-   
+      const api = useSelector((state:any) => state.apiLink);
    const fetchSales = async () => {
-    const { data } = await axios.get(`http://localhost:3000/sales`);
+    const { data } = await axios.get(`${api}sales.json`);
     return data;
 };
     const { data } = useQuery({
@@ -19,7 +19,7 @@ export default function Sales(){
         })
 
         const fetchMerchants = async () => {
-            const { data } = await axios.get(`http://localhost:3000/merchants`);
+            const { data } = await axios.get(`${api}merchants.json`);
             return data;
         };
             const { data:merchants } = useQuery({
@@ -28,7 +28,7 @@ export default function Sales(){
                     enabled: true,
                 })
                 const fetchProducts = async () => {
-                    const { data } = await axios.get(`http://localhost:3000/items`);
+                    const { data } = await axios.get(`${api}items.json`);
                     return data;
                 };
                     const { data:fetchedProducts } = useQuery({
@@ -58,7 +58,6 @@ export default function Sales(){
                         <th className="w-32 py-3 text-start">Quantity</th>
                         <th className="w-32 py-3 text-start">Selling Price</th>
                         <th className="w-56 text-start">Payment Options</th>
-                        <th className="w-28 text-start">Actions</th>
                     </tr>
                     <tr></tr>
                 </thead>
@@ -86,16 +85,6 @@ export default function Sales(){
                             {data.payments.map((data:any)=>(
                                 <td className="py-2 flex flex-col">{data.bank}-{data.amount}</td>
                             ))}
-                        </td>
-                        <td className="flex gap-4 align-middle py-2">
-                            <ActionIcon
-                                title="Verify Payment"
-                                color="blue"
-                                variant="outline"
-                                size={25}
-                                >
-                                <IconChecks />
-                            </ActionIcon>
                         </td>
                     </tr>
                   ))}

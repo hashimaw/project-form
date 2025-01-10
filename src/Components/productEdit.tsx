@@ -9,6 +9,9 @@ import dayjs from 'dayjs';
 import { productschema } from '../schemas/validationSchema';
 import { zodResolver } from '@mantine/form';
 import axios from 'axios';
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
+
 
 interface Product {id:string, name: string; description: string; price: number; category: string; tags: string[]; use: string; minimumQuantity: number; sellingPrice: number; addedBy: string; expiresAt: Date; quantityOnHand: number; reservedQuantity: number; discount: number; imageUrls: string[];}
 interface ProductProps { product: Product; }
@@ -41,7 +44,7 @@ export function EditProduct ({ product }: ProductProps) {
 
   const editProduct = async (newPost: Product) => {
     try {
-        const { data } = await axios.patch(`http://localhost:3000/items/${product.id}`, newPost);
+        const { data } = await axios.patch(`${api}items/${product.id}`, newPost);
         return data; 
     } catch (error: any) {
       

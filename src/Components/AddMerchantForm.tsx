@@ -5,7 +5,8 @@ import { IMerchant } from "../interfaces/marchant";
 import { merchantSchema } from "../schemas/validationSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
 
 type TAddMerchantform = {
     opened: boolean
@@ -18,7 +19,7 @@ export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
 
     const createMerchant = async (newPost: IMerchant) => {
         try {
-            const { data } = await axios.post(`http://localhost:3000/merchants`, newPost);
+            const { data } = await axios.post(`${api}merchants`, newPost);
             return data; 
         } catch (error: any) {
           

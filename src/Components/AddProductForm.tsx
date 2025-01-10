@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { IconX } from '@tabler/icons-react';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { productschema } from '../schemas/validationSchema';
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
 
 type TProductForm = {
     opened: boolean,
@@ -37,7 +39,7 @@ export default function AddProductForm({opened, onClose}: TProductForm){
 
     const createProduct = async (newPost: Product) => {
         try {
-            const { data } = await axios.post(`http://localhost:3000/items`, newPost);
+            const { data } = await axios.post(`${api}items`, newPost);
             return data; 
         } catch (error: any) {
           

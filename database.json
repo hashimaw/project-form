@@ -140,6 +140,12 @@
       "name": "New Guy",
       "address": "Gumuz",
       "phone": 23323232323
+    },
+    {
+      "id": "kz9xi9ddq",
+      "name": "New purchaser",
+      "address": "bole",
+      "phone": 565665655656
     }
   ],
   "sales": [

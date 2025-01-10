@@ -9,6 +9,9 @@ import { zodResolver } from "@mantine/form";
 import { orderedItemSchema, paymentSchema } from "../schemas/validationSchema";
 import { z } from "zod";
 import { IMerchant } from "../interfaces/marchant";
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
+
 
 type TsellProductsform = {
     opened: boolean
@@ -34,7 +37,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
     const queryClient = useQueryClient();
     
     const fetchMerchants = async () => {
-        const { data } = await axios.get(`http://localhost:3000/merchants`);
+        const { data } = await axios.get(`${api}merchants`);
         return data;
     };
         const { isFetched:merchantIsFetched, data:merchants } = useQuery({
@@ -44,7 +47,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
             })
     
         const fetchProducts = async () => {
-            const { data } = await axios.get(`http://localhost:3000/items`);
+            const { data } = await axios.get(`${api}items`);
             return data;
         };
 
@@ -75,7 +78,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
 
         const createProduct = async (newPost: ISales) => {
             try {
-                const { data } = await axios.post(`http://localhost:3000/sales`, newPost);
+                const { data } = await axios.post(`${api}sales`, newPost);
                 return data; 
             } catch (error: any) {
               

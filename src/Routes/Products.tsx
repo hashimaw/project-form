@@ -6,6 +6,9 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
+
 
 type Product = {id: string; name: string; description: string; price: number; category: string; tags: string[]; use: string; minimumQuantity: number; sellingPrice: number; addedBy: string; expiresAt: string; quantityOnHand: number; reservedQuantity: number; discount: number; imageUrls: string[]; createdAt: string; updatedAt: string}
 
@@ -17,7 +20,7 @@ export default function Products(){
 
 
   const fetchProducts = async (page: number) => {
-    const { data } = await axios.get(`http://localhost:3000/items`, {
+    const { data } = await axios.get(`${api}items`, {
         params: { page },
     });
     return data;

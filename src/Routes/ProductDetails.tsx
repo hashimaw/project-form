@@ -6,6 +6,8 @@ import { RatingComponent } from '../Components/ratingcomponent';
 import { EditProduct } from '../Components/productEdit';
 import { useEffect } from 'react';
 import { DeleteProduct } from '../Components/delete';
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
 
 export function ProductDetails () {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +16,7 @@ export function ProductDetails () {
   const productquery = useQuery({
     queryKey: ['product'],
     queryFn:()=>
-      fetch(`http://localhost:3000/items/${id}`).then((res) =>
+      fetch(`${api}items/${id}`).then((res) =>
         res.json(),
       ),
       enabled: true,

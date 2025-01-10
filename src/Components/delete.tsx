@@ -5,6 +5,8 @@ import { useForm } from '@mantine/form';
 import { IconTrash } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from "react-redux";
+const api = useSelector((state:any) => state.apiLink);
 
 interface Product {id:string, name: string; description: string; price: number; category: string; tags: string[]; use: string; minimumQuantity: number; sellingPrice: number; addedBy: string; expiresAt: Date; quantityOnHand: number; reservedQuantity: number; discount: number; imageUrls: string[];}
 interface ProductProps { product: Product; }
@@ -25,7 +27,7 @@ export function DeleteProduct ({ product }: ProductProps) {
 
   const deleteProduct = async () => {
     try {
-        const { data } = await axios.delete(`https://test-api.nova-techs.com/products/${product.id}`);
+        const { data } = await axios.delete(`${api}items/${product.id}`);
         return data; 
     } catch (error: any) {
       
