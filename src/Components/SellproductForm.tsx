@@ -10,8 +10,6 @@ import { orderedItemSchema, paymentSchema } from "../schemas/validationSchema";
 import { z } from "zod";
 import { IMerchant } from "../interfaces/marchant";
 import { useSelector } from "react-redux";
-const api = useSelector((state:any) => state.apiLink);
-
 
 type TsellProductsform = {
     opened: boolean
@@ -35,7 +33,8 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
     const [selectedMerchant, setMerchant] = useState('');
     const [SelectableMerchants, setSelectableMerchants] = useState<any>([]);
     const queryClient = useQueryClient();
-    
+    const api = useSelector((state:any) => state.apiLink);
+
     const fetchMerchants = async () => {
         const { data } = await axios.get(`${api}merchants`);
         return data;
@@ -59,7 +58,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
 
         useEffect(()=>{
             if (isFetched) {
-                setItems(products.map((item: ISelectorItem) => ({
+                setItems(products?.map((item: ISelectorItem) => ({
                     label: item.name,
                     value: item.id,
                 })));

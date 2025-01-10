@@ -8,7 +8,6 @@ import axios from 'axios';
 import { IMerchant } from '../interfaces/marchant';
 import { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
-const api = useSelector((state:any) => state.apiLink);
 
 type TDeleteMerchant = {
     merchant: IMerchant;
@@ -20,6 +19,7 @@ export function DeleteMerchant ({ merchant }: TDeleteMerchant) {
   const [merchantHasSales, setMerchantHasSales] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const api = useSelector((state:any) => state.apiLink);
 
   const fetchSales = async () => {
     const { data } = await axios.get(`${api}sales`);

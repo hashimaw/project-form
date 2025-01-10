@@ -8,7 +8,8 @@ import { IconX } from '@tabler/icons-react';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { productschema } from '../schemas/validationSchema';
 import { useSelector } from "react-redux";
-const api = useSelector((state:any) => state.apiLink);
+
+
 
 type TProductForm = {
     opened: boolean,
@@ -23,7 +24,7 @@ export default function AddProductForm({opened, onClose}: TProductForm){
     const [tagInput, setTagInput] = useState<string>('');
     const [imageInputValue, setImageInputValue] = useState<string>(''); 
     const [imageUrls, setImageUrls] = useState<string[]>([]);
-
+    const api = useSelector((state:any) => state.apiLink);
     const queryClient = useQueryClient();
 
     const handleSubmit = (values: Product) => {

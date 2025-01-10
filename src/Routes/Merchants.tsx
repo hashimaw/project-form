@@ -10,13 +10,12 @@ import { useQuery } from "@tanstack/react-query";
 import EditMerchantForm from "../Components/EditMerchantForm";
 import { DeleteMerchant } from "../Components/deleteMerchant";
 import { useSelector } from "react-redux";
-const api = useSelector((state:any) => state.apiLink);
-
 
 export default function Merhcants(){
       const [openMerchantForm, { open, close }] = useDisclosure(false);
 
       const [chartData, setChartData] = useState<any>([])
+      const api = useSelector((state:any) => state.apiLink);
 
       const fetchMerchants = async () => {
         const { data } = await axios.get(`${api}merchants`);
@@ -94,7 +93,7 @@ let arrayOfColors = [
               }, [] as Record<string, any>[])
         
        setChartData(processedMerchants);
-       chartData && console.log(chartData);
+
         }, [sales]);
 
 
@@ -140,7 +139,6 @@ const idMap = fetchedProducts?.reduce((acc: Record<string, string>, item:any) =>
         )).map((key,index) => ({ name: key, color: arrayOfColors[index] }));
         }
 
-        console.log(charfiles);
     return(
         <>
         <Center mt={20}>

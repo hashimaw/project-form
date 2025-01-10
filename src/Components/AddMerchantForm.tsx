@@ -6,7 +6,6 @@ import { merchantSchema } from "../schemas/validationSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const api = useSelector((state:any) => state.apiLink);
 
 type TAddMerchantform = {
     opened: boolean
@@ -16,6 +15,7 @@ type TAddMerchantform = {
 export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
 
     const queryClient = useQueryClient();
+    const api = useSelector((state:any) => state.apiLink);
 
     const createMerchant = async (newPost: IMerchant) => {
         try {

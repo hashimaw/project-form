@@ -7,12 +7,12 @@ import { EditProduct } from '../Components/productEdit';
 import { useEffect } from 'react';
 import { DeleteProduct } from '../Components/delete';
 import { useSelector } from "react-redux";
-const api = useSelector((state:any) => state.apiLink);
 
 export function ProductDetails () {
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
-  
+  const api = useSelector((state:any) => state.apiLink);
+
   const productquery = useQuery({
     queryKey: ['product'],
     queryFn:()=>
