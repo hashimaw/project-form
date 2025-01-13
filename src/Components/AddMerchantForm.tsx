@@ -5,7 +5,8 @@ import { IMerchant } from "../interfaces/marchant";
 import { merchantSchema } from "../schemas/validationSchema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { api } from "../Constants/api";
+import { QUERY_KEYS } from "../Constants/queryKeys";
 
 type TAddMerchantform = {
     opened: boolean
@@ -15,11 +16,11 @@ type TAddMerchantform = {
 export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
 
     const queryClient = useQueryClient();
-    const api = useSelector((state:any) => state.apiLink);
+    
 
     const createMerchant = async (newPost: IMerchant) => {
         try {
-            const { data } = await axios.post(`${api}merchants`, newPost);
+            const { data } = await axios.post(api.merchants, newPost);
             return data; 
         } catch (error: any) {
           
@@ -27,17 +28,17 @@ export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
         }
     };
 
-    const { isPending:fileUploadPending, mutate } = useMutation({
+    const { isPending:UploadPending, mutate } = useMutation({
         mutationFn: (newPost: IMerchant) => createMerchant(newPost),
           onError:()=>{},
           onSuccess:() => {
-            queryClient.invalidateQueries({queryKey: ["merchants"]});
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.MERCHANTS]});
             onClose();
             MerchantForm.reset();
           }
       })
 
-    const handlefileupload = (merchant:any) => {
+    const handleupload = (merchant:any) => {
         const newSale: IMerchant = {
             id: Math.random().toString(36).substr(2, 9),
             name: merchant.name,
@@ -62,8 +63,8 @@ export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
                 onClose(); 
                 MerchantForm.reset();
             }} title='Merchant Add Form' >
-                <LoadingOverlay visible={fileUploadPending} />
-                <form onSubmit={MerchantForm.onSubmit((values)=>{handlefileupload(values); console.log(values);})}>
+                <LoadingOverlay visible={UploadPending} />
+                <form  onSubmit={MerchantForm.onSubmit(handleupload)}>
 
                     <TextInput mb={7}
                         label="Merchant Name"
@@ -89,7 +90,7 @@ export default function AddMerchantForm({opened, onClose }:TAddMerchantform, ){
                         />
 
                     <Center mt={20}>
-                        <Button  type="submit">Submit</Button>
+                        <Button  type="submit" loading={UploadPending}>Submit</Button>
                     </Center>
 
                 </form>
