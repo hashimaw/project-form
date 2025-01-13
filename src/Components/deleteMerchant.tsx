@@ -6,7 +6,8 @@ import { IconTrash } from '@tabler/icons-react';
 import axios from 'axios';
 import { IMerchant } from '../interfaces/marchant';
 import { useState, useEffect } from 'react';
-import { useSelector } from "react-redux";
+import { API_BASE_URL } from '../utils/config';
+import { QUERY_KEYS } from '../Constants/queryKeys';
 
 type TDeleteMerchant = {
     merchant: IMerchant;
@@ -18,14 +19,13 @@ export function DeleteMerchant ({ merchant }: TDeleteMerchant) {
   const [merchantHasSales, setMerchantHasSales] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
-  const api = useSelector((state:any) => state.apiLink);
 
   const fetchSales = async () => {
-    const { data } = await axios.get(`${api}sales`);
+    const { data } = await axios.get(`${API_BASE_URL}sales`);
     return data;
 };
 const { data:sales } = useQuery({
-    queryKey: ['sales'],
+    queryKey: [QUERY_KEYS.SALES],
     queryFn: () => fetchSales(),
         enabled: true,
     })
@@ -46,7 +46,7 @@ useEffect(() => {
 
   const deleteProduct = async () => {
     try {
-        const { data } = await axios.delete(`${api}merchants/${merchant.id}`);
+        const { data } = await axios.delete(`${API_BASE_URL}merchants/${merchant.id}`);
         return data; 
     } catch (error: any) {
       
@@ -58,7 +58,7 @@ useEffect(() => {
     mutationFn: () => deleteProduct(),
       onError:()=>{open()},
       onSuccess:() => {
-        queryClient.invalidateQueries({queryKey: ["merchants"]});
+        queryClient.invalidateQueries({queryKey: [QUERY_KEYS.MERCHANTS]});
         form.reset();
         close();
       }

@@ -4,8 +4,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { IconTrash } from '@tabler/icons-react';
 import axios from 'axios';
-import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../utils/config';
+import { QUERY_KEYS } from '../Constants/queryKeys';
 
 interface Product {id:string, name: string; description: string; price: number; category: string; tags: string[]; use: string; minimumQuantity: number; sellingPrice: number; addedBy: string; expiresAt: Date; quantityOnHand: number; reservedQuantity: number; discount: number; imageUrls: string[];}
 interface ProductProps { product: Product; }
@@ -15,8 +16,6 @@ export function DeleteProduct ({ product }: ProductProps) {
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  const api = useSelector((state:any) => state.apiLink);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -28,7 +27,7 @@ export function DeleteProduct ({ product }: ProductProps) {
 
   const deleteProduct = async () => {
     try {
-        const { data } = await axios.delete(`${api}items/${product.id}`);
+        const { data } = await axios.delete(`${API_BASE_URL}items/${product.id}`);
         return data; 
     } catch (error: any) {
       
@@ -40,7 +39,7 @@ export function DeleteProduct ({ product }: ProductProps) {
     mutationFn: () => deleteProduct(),
       onError:()=>{open()},
       onSuccess:() => {
-        queryClient.invalidateQueries({queryKey: ["products"]});
+        queryClient.invalidateQueries({queryKey: [QUERY_KEYS.PRODUCTS]});
         form.reset();
         close();
         navigate('/');

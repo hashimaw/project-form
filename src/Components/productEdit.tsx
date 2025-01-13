@@ -9,7 +9,8 @@ import dayjs from 'dayjs';
 import { productschema } from '../schemas/validationSchema';
 import { zodResolver } from '@mantine/form';
 import axios from 'axios';
-import { useSelector } from "react-redux";
+import { API_BASE_URL } from '../utils/config';
+import { QUERY_KEYS } from '../Constants/queryKeys';
 
 interface Product {id:string, name: string; description: string; price: number; category: string; tags: string[]; use: string; minimumQuantity: number; sellingPrice: number; addedBy: string; expiresAt: Date; quantityOnHand: number; reservedQuantity: number; discount: number; imageUrls: string[];}
 interface ProductProps { product: Product; }
@@ -22,7 +23,6 @@ export function EditProduct ({ product }: ProductProps) {
   const [tagInput, setTagInput] = useState<string>('');
   const [imageInputValue, setImageInputValue] = useState<string>(''); 
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const api = useSelector((state:any) => state.apiLink);
   const queryClient = useQueryClient();
 
   useEffect(() => { if (product) { 
@@ -42,7 +42,7 @@ export function EditProduct ({ product }: ProductProps) {
 
   const editProduct = async (newPost: Product) => {
     try {
-        const { data } = await axios.patch(`${api}items/${product.id}`, newPost);
+        const { data } = await axios.patch(`${API_BASE_URL}items/${product.id}`, newPost);
         return data; 
     } catch (error: any) {
       
@@ -54,7 +54,7 @@ export function EditProduct ({ product }: ProductProps) {
     mutationFn: (newPost: Product) => editProduct(newPost),
       onError:()=>{open()},
       onSuccess:() => {
-        queryClient.invalidateQueries({queryKey: ["product"]});
+        queryClient.invalidateQueries({queryKey: [QUERY_KEYS.PRODUCTS]});
         form.reset();
         setTags([]);
         close();

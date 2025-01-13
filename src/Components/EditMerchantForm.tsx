@@ -7,7 +7,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { IconEdit } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import { useSelector } from "react-redux";
+import { API_BASE_URL } from "../utils/config";
+import { QUERY_KEYS } from "../Constants/queryKeys";
 
 type TEditMerchantform = {
     merchant: IMerchant;
@@ -17,11 +18,10 @@ export default function EditMerchantForm({merchant }:TEditMerchantform ){
 
     const [merchantEdit,{ open , close }]=useDisclosure(false);
     const queryClient = useQueryClient();
-    const api = useSelector((state:any) => state.apiLink);
 
     const editMerchant = async (newPost: IMerchant) => {
         try {
-            const { data } = await axios.patch(`${api}merchants/${merchant.id}`, newPost);
+            const { data } = await axios.patch(`${API_BASE_URL}merchants/${merchant.id}`, newPost);
             return data;
         } catch (error: any) {
           
@@ -33,7 +33,7 @@ export default function EditMerchantForm({merchant }:TEditMerchantform ){
         mutationFn: (newPost: IMerchant) => editMerchant(newPost),
           onError:()=>{open()},
           onSuccess:() => {
-            queryClient.invalidateQueries({queryKey: ["merchants"]});
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.MERCHANTS]});
             close();
             MerchantForm.reset();
           }

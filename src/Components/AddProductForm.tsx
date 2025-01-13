@@ -7,7 +7,8 @@ import { useState } from 'react';
 import { IconX } from '@tabler/icons-react';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { productschema } from '../schemas/validationSchema';
-import { useSelector } from "react-redux";
+import { API_BASE_URL } from '../utils/config';
+import { QUERY_KEYS } from '../Constants/queryKeys';
 
 
 
@@ -24,7 +25,6 @@ export default function AddProductForm({opened, onClose}: TProductForm){
     const [tagInput, setTagInput] = useState<string>('');
     const [imageInputValue, setImageInputValue] = useState<string>(''); 
     const [imageUrls, setImageUrls] = useState<string[]>([]);
-    const api = useSelector((state:any) => state.apiLink);
     const queryClient = useQueryClient();
 
     const handleSubmit = (values: Product) => {
@@ -40,7 +40,7 @@ export default function AddProductForm({opened, onClose}: TProductForm){
 
     const createProduct = async (newPost: Product) => {
         try {
-            const { data } = await axios.post(`${api}items`, newPost);
+            const { data } = await axios.post(`${API_BASE_URL}items`, newPost);
             return data; 
         } catch (error: any) {
           
@@ -54,7 +54,7 @@ export default function AddProductForm({opened, onClose}: TProductForm){
         mutationFn: (newPost: Product) => createProduct(newPost),
           onError:()=>{},
           onSuccess:() => {
-            queryClient.invalidateQueries({queryKey: ["products"]});
+            queryClient.invalidateQueries({queryKey: [QUERY_KEYS.PRODUCTS]});
             form.reset();
             setTags([]);
             onClose();

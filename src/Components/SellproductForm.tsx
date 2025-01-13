@@ -9,7 +9,8 @@ import { zodResolver } from "@mantine/form";
 import { orderedItemSchema, paymentSchema } from "../schemas/validationSchema";
 import { z } from "zod";
 import { IMerchant } from "../interfaces/marchant";
-import { useSelector } from "react-redux";
+import { API_BASE_URL } from "../utils/config";
+import { QUERY_KEYS } from "../Constants/queryKeys";
 
 type TsellProductsform = {
     opened: boolean
@@ -33,25 +34,24 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
     const [selectedMerchant, setMerchant] = useState('');
     const [SelectableMerchants, setSelectableMerchants] = useState<any>([]);
     const queryClient = useQueryClient();
-    const api = useSelector((state:any) => state.apiLink);
 
     const fetchMerchants = async () => {
-        const { data } = await axios.get(`${api}merchants`);
+        const { data } = await axios.get(`${API_BASE_URL}merchants`);
         return data;
     };
         const { isFetched:merchantIsFetched, data:merchants } = useQuery({
-            queryKey: ['merchants'],
+            queryKey: [QUERY_KEYS.MERCHANTS],
             queryFn: () => fetchMerchants(),
                 enabled: true,
             })
     
         const fetchProducts = async () => {
-            const { data } = await axios.get(`${api}items`);
+            const { data } = await axios.get(`${API_BASE_URL}items`);
             return data;
         };
 
     const { isFetched, data:products } = useQuery({
-        queryKey: ['products', page],
+        queryKey: [QUERY_KEYS.PRODUCTS, page],
         queryFn: () => fetchProducts(),
             enabled: true,
         })
@@ -77,7 +77,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
 
         const createProduct = async (newPost: ISales) => {
             try {
-                const { data } = await axios.post(`${api}sales`, newPost);
+                const { data } = await axios.post(`${API_BASE_URL}sales`, newPost);
                 return data; 
             } catch (error: any) {
               
@@ -89,7 +89,7 @@ export default function SellProductsForm({opened, onClose }:TsellProductsform, )
             mutationFn: (newPost: ISales) => createProduct(newPost),
               onError:()=>{},
               onSuccess:() => {
-                queryClient.invalidateQueries({queryKey: ["sales"]});
+                queryClient.invalidateQueries({queryKey: [QUERY_KEYS.SALES]});
                 onClose(); 
                 orederdItemsForm.reset(); 
                 marchantForm.reset(); 
